@@ -9,7 +9,7 @@ int main()
     return 0;
 }
 
-void homepage(){
+void homePage(){
     int choice;
 
     cout << endl;
