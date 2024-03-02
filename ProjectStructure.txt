@@ -1,0 +1,2 @@
+There is a folder named Users which contains separate folder for each user with each folder containing three text files namely usedDetails , upcomingRides, pastRides.
+Similarly we have a Folder named admin containing details of admin in three files as above.
