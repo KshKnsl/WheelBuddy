@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <windows.h>//for usleep function
 using namespace std;
 class User 
 {
@@ -57,7 +58,8 @@ public:
         return false;
     }
 };
-class RegistrationManager {
+class RegistrationManager 
+{
 public:
     static void registerUser(const string& filename) {
         string username, password;
@@ -84,123 +86,128 @@ string getUserInput(const string& prompt)
     cin >> input;
     return input;
 }
-void thankYouPage() 
+class Pages
 {
-    cout << "\nAre you sure you want to exit? (YES/NO)---";
-    char ch;        cin >> ch;
-    if (ch == 'Y' || ch == 'y') 
+    public:
+    //this function returns the choice of the user
+    int homePage()
     {
-        system("cls");
-        system("color 3E");
-        cout<<"\n\t\t\t\t\t\t  ________________________________________________________________________";
-        cout<<"\n\t\t\t\t\t\t||                                                                        ||";
-        cout<<"\n\t\t\t\t\t\t|| ---------- |     |    /\\    |\\    | |  /      \\     / |=====| |    |   ||";
-        cout<<"\n\t\t\t\t\t\t||     ||     |     |   /  \\   | \\   | | /        \\   /  |     | |    |   ||";
-        cout<<"\n\t\t\t\t\t\t||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||";
-        cout<<"\n\t\t\t\t\t\t||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||";
-        cout<<"\n\t\t\t\t\t\t||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||";
-        cout<<"\n\t\t\t\t\t\t||________________________________________________________________________||\n";
-
-        system("cls");
-
-        // Display a feedback prompt
-        cout << "\n\n";
-        system("color 2E");
-        int choice = 0;
-        cout << "Would you like to provide feedback? (1: Yes, 2: No): ";
-        cin >> choice;
-
-        if (choice == 1) 
-        {
-            // Feedback form
-            char feedback[1000];
-            cout << "\nPlease provide your feedback (up to 999 characters):\n";
-            cin.getline(feedback, sizeof(feedback));
-            // Save the feedback to a file
-            size_t feedback_length = strlen(feedback);
-            if (feedback_length > 0 && feedback[feedback_length - 1] == '\n') 
-                feedback[feedback_length - 1] = '\0';
-            FILE *feedbackFile = fopen("Program Data/feedback.txt", "a");
-            if (feedbackFile == NULL)
-                cout << "Error saving feedback. Please try again later.\n";
-            else 
-            {
-                fprintf(feedbackFile, "\n%s\n", feedback);
-                fclose(feedbackFile);
-                cout << "Thank you for your feedback! It has been saved in feedback.txt.\n";
-            }
-
-            // Prompt the user to rate the program
-            cout << "\nRATE US NOW!!\n";
-            cout << "1. *\n";
-            cout << "2. **\n";
-            cout << "3. ***\n";
-            cout << "4. ****\n";
-            cout << "5. *****\n";
-            int rate;
-            cin >> rate;
-        }
-
-        // Display a goodbye message
-        cout << "\nGoodbye! Have a great day!\n";
-        // Pause for 2 seconds
-        this_thread::sleep_for(chrono::seconds(1));
-        // Clears the screen
-        system("cls");
-        // Exit the program
-        exit(0);
-    } 
-    else 
-    {
-        // If the user chooses not to exit, it goes back to the home page
-        main();
+        system("color 2A");
+        cout<<"\n  _____________________________________________________________________\n";
+        cout<<"||                                                                     ||\n";
+        cout<<"||   \\      /\\      / |===== |      |====== /=====\\ |\\    /| |=====    ||\n";
+        cout<<"||    \\    /  \\    /  |_____ |      |       |     | | \\  / | |_____    ||\n";
+        cout<<"||     \\  /    \\  /   |      |      |       |     | |  \\/  | |         ||\n";
+        cout<<"||      \\/      \\/    |===== |_____ |====== \\=====/ |      | |=====    ||\n";
+        cout<<"||                           TO WHEEL BUDDY                            ||\n";
+        cout<<"||     MENU:-                                                          ||\n";
+        cout<<"||   1. Login                                                          ||\n";
+        cout<<"||   2. Create a new account                                           ||\n";
+        cout<<"||   3. CLOSE WHEELBUDDY                                               ||\n";
+        cout<<"||_____________________________________________________________________||\n";
+        cout<<"ENTER YOUR CHOICE: ";
+        int choice;
+        cin>>choice;
+        cout<<"\nLoading.....\n";
+        Sleep(3000);
+        return choice;
     }
-}
+    void thankYouPage() 
+    {
+        cout << "\nAre you sure you want to exit? (YES/NO)---";
+        string ch;        cin >> ch;
+        cin.ignore();
+        if (ch == "YES" || ch == "yes" || ch=="Yes") 
+        {
+            system("cls");       system("color 6D");
+            cout<<"\n\t\t\t\t\t\t  ________________________________________________________________________";
+            cout<<"\n\t\t\t\t\t\t||                                                                        ||";
+            cout<<"\n\t\t\t\t\t\t|| ---------- |     |    /\\    |\\    | |  /      \\     / |=====| |    |   ||";
+            cout<<"\n\t\t\t\t\t\t||     ||     |     |   /  \\   | \\   | | /        \\   /  |     | |    |   ||";
+            cout<<"\n\t\t\t\t\t\t||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||";
+            cout<<"\n\t\t\t\t\t\t||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||";
+            cout<<"\n\t\t\t\t\t\t||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||";
+            cout<<"\n\t\t\t\t\t\t||________________________________________________________________________||\n";
+            Sleep(4000);
+            system("cls");
+            // Display a feedback prompt
+            cout << "\n\n";       system("color 5E");
+            int choice = 0;
+            cin.ignore();
+            cout << "Would you like to provide feedback? (1: Yes, 2: No): ";
+            cin >> choice;
+            if (choice == 1) 
+            {
+                // Feedback form
+                string feedback;
+                cout << "\nPlease provide your feedback (up to 999 characters):\n";
+                getline(cin ,feedback);
+                cin.ignore();
+                // Save the feedback to a file
+                FILE *feedbackFile = fopen("Files/feedback.txt", "a");
+                if(feedbackFile == NULL)
+                    cout << "Error saving feedback. Please try again later.\n";
+                else 
+                {
+                    fprintf(feedbackFile, "\nAFeedBack:  %s.\n", feedback);
+                    fclose(feedbackFile);
+                    cout << "Thank you for your feedback! It has been saved in feedback.txt.\n";
+                }
+                Sleep(1000);
+                system("cls");
+                // Prompt the user to rate the program
+                cout << "\nRATE US NOW!!\n";
+                cout << "1. *\n";
+                cout << "2. **\n";
+                cout << "3. ***\n";
+                cout << "4. ****\n";
+                cout << "5. *****\n";
+                int rate;
+                cin >> rate;
+            }
+            system("cls");
+            system("color 26");
+            cout << "\nGoodbye! Have a great day!\n";
+            Sleep(3000);
+            system("cls");
+            exit(0);
+        } 
+    }
+};
 int main() 
 {
-    string filename = "users.txt";
+    string filename = "Credentials.txt";
     LoginManager login(filename);
-    cout<<"||                                                                     ||\n";
-    cout<<"\n  _____________________________________________________________________\n";
-    cout<<"||   \\      /\\      / |===== |      |====== /=====\\ |\\    /| |=====    ||\n";
-    cout<<"||    \\    /  \\    /  |_____ |      |       |     | | \\  / | |_____    ||\n";
-    cout<<"||     \\  /    \\  /   |      |      |       |     | |  \\/  | |         ||\n";
-    cout<<"||      \\/      \\/    |===== |_____ |====== \\=====/ |      | |=====    ||\n";
-    cout<<"||                           TO WHEEL BUDDY                            ||\n";
-    cout<<"||     MENU:-                                                          ||\n";
-    cout<<"||   1. Login                                                          ||\n";
-    cout<<"||   2. Create a new account                                           ||\n";
-    cout<<"||   3. CLOSE WHEELBUDDY                                               ||\n";
-    cout<<"||_____________________________________________________________________||\n";
-    cout<<"ENTER YOUR CHOICE: ";
-    int choice;
-    cin>>choice;
-    cout<<"\nLoading.....\n";
+    Pages page;
+    int choice = page.homePage();
+    //homePage() function returns the choice of the user
+    //MENU: 1 for login and 2 for create account and 3 or any other number for exit
     switch(choice)
     {
         case 1: 
-        string username, password;
-        cout << "Enter username: ";
-        username = getUserInput("");
-        cout << "Enter password: ";
-        password = getUserInput("");
-        if (login.authenticate(username, password))
-            cout << "Login successful. Welcome, " << username << "!\n";
-        else
-        {
-            cout << "Login failed. Incorrect username or password.\n";
-            cout << "Do you want to create a new account? (yes/no): ";
-            string response;
-            response = getUserInput("");
-            if (response == "yes")
-                RegistrationManager::registerUser(filename);
-        }
+            string username, password;
+            cout << "Enter username: ";
+            username = getUserInput("");
+            cout << "Enter password: ";
+            password = getUserInput("");
+            if (login.authenticate(username, password))
+                cout << "Login successful. Welcome, " << username << "!\n";
+            else
+            {
+                cout << "Login failed. Incorrect username or password.\n";
+                cout << "Do you want to create a new account? (yes/no): ";
+                string response;
+                response = getUserInput("");
+                if (response == "yes")
+                    RegistrationManager::registerUser(filename);
+            }
         break;
         case 2:
-        RegistrationManager::registerUser(filename);
+           RegistrationManager::registerUser(filename);
         break;
         default:
-        thankYouPage();
-    }   
+           page.thankYouPage();
+    }
+           page.thankYouPage();
     return 0;
 }
