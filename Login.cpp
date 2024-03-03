@@ -4,6 +4,9 @@
 #include <vector>
 #include <windows.h> //for usleep function
 using namespace std;
+
+class Pages; // Forward declaration
+
 class User
 {
 private:
@@ -17,21 +20,22 @@ public:
         password = pwd;
     }
 
-    string getUsername()
+    string getUsername() const // Make it const
     {
         return username;
     }
 
-    string getPassword()
+    string getPassword() const // Make it const
     {
         return password;
     }
 
-    bool checkCredentials(const string &uname, const string &pwd)
+    bool checkCredentials(const string &uname, const string &pwd) const // Make it const
     {
         return (username == uname && password == pwd);
     }
 };
+
 class LoginManager
 {
 private:
@@ -65,6 +69,7 @@ public:
         return false;
     }
 };
+
 class RegistrationManager
 {
 public:
@@ -95,72 +100,8 @@ string getUserInput(const string &prompt)
     cin >> input;
     return input;
 }
-int main()
-{
-    string filename = "Credentials.txt";
-    Pages page;
-    int choice = page.homePage();
-    page.thankYouPage();
-    LoginManager login(filename);
-    // homePage() function returns the choice of the user
-    // MENU: 1 for login and 2 for create account and 3 or any other number for exit
-    switch (choice)
-    {
-    case 1:
-        string username, password;
-        cout << "Enter username: ";
-        username = getUserInput("");
-        cout << "Enter password: ";
-        password = getUserInput("");
-        if (login.authenticate(username, password))
-            cout << "Login successful. Welcome, " << username << "!\n";
-        else
-        {
-            cout << "Login failed. Incorrect username or password.\n";
-            cout << "Do you want to create a new account? (yes/no): ";
-            string response;
-            response = getUserInput("");
-            if (response == "yes")
-                RegistrationManager::registerUser(filename);
-        }
-        break;
-    case 2:
-        RegistrationManager::registerUser(filename);
-        break;
-    default:
-        page.thankYouPage();
-    }
-    return 0;
-}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Pages
+class Pages // Define Pages class before main
 {
 public:
     void fileLoadingPage()
@@ -234,3 +175,41 @@ public:
         }
     }
 };
+
+int main()
+{
+    string filename = "Credentials.txt";
+    Pages page;
+    int choice = page.homePage();
+    page.thankYouPage();
+    LoginManager login(filename);
+    // homePage() function returns the choice of the user
+    // MENU: 1 for login and 2 for create account and 3 or any other number for exit
+    string username, password;
+    switch (choice)
+    {
+    case 1:
+        cout << "Enter username: ";
+        username = getUserInput("");
+        cout << "Enter password: ";
+        password = getUserInput("");
+        if (login.authenticate(username, password))
+            cout << "Login successful. Welcome, " << username << "!\n";
+        else
+        {
+            cout << "Login failed. Incorrect username or password.\n";
+            cout << "Do you want to create a new account? (yes/no): ";
+            string response;
+            response = getUserInput("");
+            if (response == "yes")
+                RegistrationManager::registerUser(filename);
+        }
+        break;
+    case 2:
+        RegistrationManager::registerUser(filename);
+        break;
+    default:
+        page.thankYouPage();
+    }
+    return 0;
+}
