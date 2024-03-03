@@ -1,30 +1,75 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <windows.h> // for Sleep function
+#include <vector>
+#include <windows.h> //for usleep function
 using namespace std;
-
-class User {
-protected:
+class User
+{
+private:
     string username;
     string password;
 
 public:
-    User(const string& uname, const string& pwd) : username(uname), password(pwd) {}
+    User(const string &uname, const string &pwd)
+    {
+        username = uname;
+        password = pwd;
+    }
 
-    string getUsername() const {
+    string getUsername()
+    {
         return username;
     }
 
-    string getPassword() const {
+    string getPassword()
+    {
         return password;
     }
 
-    virtual bool authenticate(const string& uname, const string& pwd) const {
+    bool checkCredentials(const string &uname, const string &pwd)
+    {
         return (username == uname && password == pwd);
     }
+};
+class LoginManager
+{
+private:
+    vector<User> users;
 
-    static void registerUser(const string& filename) {
+public:
+    LoginManager(const string &filename)
+    {
+        ifstream fileIn(filename);
+        if (!fileIn.is_open())
+        {
+            cerr << "Error: Unable to open file for user data." << endl;
+            return;
+        }
+        string username, password;
+        while (fileIn >> username >> password)
+            users.push_back(User(username, password));
+
+        fileIn.close();
+    }
+
+    bool authenticate(const string &uname, const string &pwd) const
+    {
+        for (const auto &user : users)
+        {
+            if (user.checkCredentials(uname, pwd))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+class RegistrationManager
+{
+public:
+    static void registerUser(const string &filename)
+    {
         string username, password;
         cout << "Enter a new username: ";
         cin >> username;
@@ -32,7 +77,8 @@ public:
         cin >> password;
 
         ofstream fileOut(filename, ios::app);
-        if (!fileOut.is_open()) {
+        if (!fileOut.is_open())
+        {
             cerr << "Error: Unable to open file for user data." << endl;
             return;
         }
@@ -40,39 +86,104 @@ public:
         fileOut.close();
         cout << "Account created successfully!\n";
     }
-
-    static bool checkUserExists(const string& filename, const string& uname) {
-        ifstream fileIn(filename);
-        if (!fileIn.is_open()) {
-            cerr << "Error: Unable to open file for user data." << endl;
-            return false;
-        }
-
-        string storedUsername, storedPassword;
-        while (fileIn >> storedUsername >> storedPassword) {
-            if (storedUsername == uname) {
-                fileIn.close();
-                return true; // User exists
-            }
-        }
-
-        fileIn.close();
-        return false; // User does not exist
-    }
 };
 
-class Authenticate : public User {
-public:
-    Authenticate(const string& uname, const string& pwd) : User(uname, pwd) {}
-
-    bool authenticate(const string& uname, const string& pwd) const override {
-        return User::authenticate(uname, pwd);
+string getUserInput(const string &prompt)
+{
+    cout << prompt;
+    string input;
+    cin >> input;
+    return input;
+}
+int main()
+{
+    string filename = "Credentials.txt";
+    Pages page;
+    int choice = page.homePage();
+    page.thankYouPage();
+    LoginManager login(filename);
+    // homePage() function returns the choice of the user
+    // MENU: 1 for login and 2 for create account and 3 or any other number for exit
+    switch (choice)
+    {
+    case 1:
+        string username, password;
+        cout << "Enter username: ";
+        username = getUserInput("");
+        cout << "Enter password: ";
+        password = getUserInput("");
+        if (login.authenticate(username, password))
+            cout << "Login successful. Welcome, " << username << "!\n";
+        else
+        {
+            cout << "Login failed. Incorrect username or password.\n";
+            cout << "Do you want to create a new account? (yes/no): ";
+            string response;
+            response = getUserInput("");
+            if (response == "yes")
+                RegistrationManager::registerUser(filename);
+        }
+        break;
+    case 2:
+        RegistrationManager::registerUser(filename);
+        break;
+    default:
+        page.thankYouPage();
     }
-};
+    return 0;
+}
 
-class Pages {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Pages
+{
 public:
-    int homePage() {
+    void fileLoadingPage()
+    {
+        ifstream in("CodeFiles/Welcome.txt"); // displaying welcome ASCII image text on output screen fn1353
+        char str[1000];
+        while (in)
+        {
+            in.getline(str, 1000); // delim defaults to '\n' cp
+            if (in)   cout << str << endl;
+        }
+        in.close();
+        Sleep(1000);
+        cout << "\nStarting the program please wait....." << endl;
+        Sleep(1000);
+        cout << "\nloading up files....." << endl;
+        Sleep(1000);
+        system("cls");
+    }
+    // this function returns the choice of the user
+    int homePage()
+    {
+        fileLoadingPage();
         system("color 2A");
         cout << "\n  _____________________________________________________________________\n";
         cout << "||                                                                     ||\n";
@@ -90,61 +201,32 @@ public:
         int choice;
         cin >> choice;
         cout << "\nLoading.....\n";
-        Sleep(3000);
+        Sleep(1000);
         return choice;
     }
-
-    void thankYouPage() {
+    void thankYouPage()
+    {
         cout << "\nAre you sure you want to exit? (YES/NO)---";
         string ch;
         cin >> ch;
         cin.ignore();
-        if (ch == "YES" || ch == "yes" || ch == "Yes") {
+        if (ch == "YES" || ch == "yes" || ch == "Yes")
+        {
             system("cls");
             system("color 6D");
-            cout << "\n\t\t\t\t\t\t  ________________________________________________________________________";
-            cout << "\n\t\t\t\t\t\t||                                                                        ||";
-            cout << "\n\t\t\t\t\t\t|| ---------- |     |    /\\    |\\    | |  /      \\     / |=====| |    |   ||";
-            cout << "\n\t\t\t\t\t\t||     ||     |     |   /  \\   | \\   | | /        \\   /  |     | |    |   ||";
-            cout << "\n\t\t\t\t\t\t||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||";
-            cout << "\n\t\t\t\t\t\t||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||";
-            cout << "\n\t\t\t\t\t\t||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||";
-            cout << "\n\t\t\t\t\t\t||________________________________________________________________________||\n";
-            Sleep(4000);
-            system("cls");
-
+            cout << " ________  __                            __              __      __                         __  __ \n";
+            cout << "/        |/  |                          /  |            /  \\    /  |                       /  |/  |\n";
+            cout << "$$$$$$$$/ $$ |____    ______   _______  $$ |   __       $$  \\  /$$/______   __    __       $$ |$$ |\n";
+            cout << "   $$ |   $$      \\  /      \\ /       \\ $$ |  /  |       $$  \\/$$//      \\ /  |  /  |      $$ |$$ |\n";
+            cout << "   $$ |   $$$$$$$  | $$$$$$  |$$$$$$$  |$$ |_/$$/         $$  $$//$$$$$$  |$$ |  $$ |      $$ |$$ |\n";
+            cout << "   $$ |   $$ |  $$ | /    $$ |$$ |  $$ |$$   $$<           $$$$/ $$ |  $$ |$$ |  $$ |      $$/ $$/ \n";
+            cout << "   $$ |   $$ |  $$ |/$$$$$$$ |$$ |  $$ |$$$$$$  \\           $$ | $$ \\__$$ |$$ \\__$$ |       __  __ \n";
+            cout << "   $$ |   $$ |  $$ |$$    $$ |$$ |  $$ |$$ | $$  |          $$ | $$    $$/ $$    $$/       /  |/  |\n";
+            cout << "   $$/    $$/   $$/  $$$$$$$/ $$/   $$/ $$/   $$/           $$/   $$$$$$/   $$$$$$/        $$/ $$/ \n";
+            Sleep(1000);
             cout << "\n\n";
             system("color 5E");
-            int choice = 0;
-            cin.ignore();
-            cout << "Would you like to provide feedback? (1: Yes, 2: No): ";
-            cin >> choice;
-            if (choice == 1) {
-                string feedback;
-                cout << "\nPlease provide your feedback (up to 999 characters):\n";
-                cin.ignore();
-                getline(cin, feedback);
-                ofstream feedbackFile("Files/feedback.txt", ios::app);
-                if (!feedbackFile.is_open())
-                    cout << "Error saving feedback. Please try again later.\n";
-                else {
-                    feedbackFile << "\nFeedback:  " << feedback << ".\n";
-                    feedbackFile.close();
-                    cout << "Thank you for your feedback! It has been saved in feedback.txt.\n";
-                }
-                Sleep(1000);
-                system("cls");
-                cout << "\nRATE US NOW!!\n";
-                cout << "1. *\n";
-                cout << "2. **\n";
-                cout << "3. ***\n";
-                cout << "4. ****\n";
-                cout << "5. *****\n";
-                int rate;
-                cin >> rate;
-            }
-            system("cls");
-            system("color 26");
+            system("color 46");
             cout << "\nGoodbye! Have a great day!\n";
             Sleep(3000);
             system("cls");
@@ -152,48 +234,3 @@ public:
         }
     }
 };
-
-string getUserInput(const string& prompt) {
-    cout << prompt;
-    string input;
-    cin >> input;
-    return input;
-}
-
-int main() {
-    string filename = "Credentials.txt";
-    Pages page;
-    int choice = page.homePage();
-
-    string username, password;
-
-    switch (choice) {
-    case 1:
-        cout << "Enter username: ";
-        username = getUserInput("");
-        cout << "Enter password: ";
-        password = getUserInput("");
-        {
-            Authenticate user(username, password);
-            if (user.authenticate(username, password))
-                cout << "Login successful. Welcome, " << username << "!\n";
-            else {
-                cout << "Login failed. Incorrect username or password.\n";
-                cout << "Do you want to create a new account? (yes/no): ";
-                string response;
-                response = getUserInput("");
-                if (response == "yes")
-                    User::registerUser(filename);
-            }
-        }
-        break;
-    case 2:
-        User::registerUser(filename);
-        break;
-    default:
-        page.thankYouPage();
-    }
-
-    page.thankYouPage();
-    return 0;
-}
