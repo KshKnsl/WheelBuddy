@@ -142,7 +142,7 @@ public:
         cout << "||_____________________________________________________________________||\n";
         cout << "ENTER YOUR CHOICE: ";
         int choice;
-        cin >> choice;
+        cin>>choice;
         cout << "\nLoading.....\n";
         Sleep(1000);
         return choice;
@@ -211,7 +211,7 @@ int main()
         cout<<"Now you will be guided to the login page.Enter your credentials there in order to LOGIN\n";
         page.homePage();
         break;
-    default:
+    case 3:
         page.thankYouPage();
     }
     return 0;
