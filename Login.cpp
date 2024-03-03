@@ -82,14 +82,16 @@ public:
         cin >> password;
 
         ofstream fileOut(filename, ios::app);
-        if (!fileOut.is_open())
+        if (fileOut.is_open())
         {
-            cerr << "Error: Unable to open file for user data." << endl;
-            return;
+            fileOut << username << " " << password << endl;
+            fileOut.close();
+            cout << "Account created successfully!\n";
         }
-        fileOut << username << " " << password << endl;
-        fileOut.close();
-        cout << "Account created successfully!\n";
+        else{
+             cerr << "Error: Unable to open file for user data." << endl;
+             return;
+        }
     }
 };
 
@@ -181,7 +183,6 @@ int main()
     string filename = "Credentials.txt";
     Pages page;
     int choice = page.homePage();
-    page.thankYouPage();
     LoginManager login(filename);
     // homePage() function returns the choice of the user
     // MENU: 1 for login and 2 for create account and 3 or any other number for exit
@@ -207,6 +208,8 @@ int main()
         break;
     case 2:
         RegistrationManager::registerUser(filename);
+        cout<<"Now you will be guided to the login page.Enter your credentials there in order to LOGIN\n";
+        page.homePage();
         break;
     default:
         page.thankYouPage();
