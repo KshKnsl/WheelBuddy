@@ -1,4 +1,9 @@
 There is a folder named Users which contains separate folder for each user with each folder containing three text files namely usedDetails , upcomingRides, pastRides.
 Similarly we have a Folder named admin containing details of admin in three files as above.
-
 There is a file names Credentials.txt which contains all data of user od and password for login.
+There is a class Pages which contains HomePage and ExitPage.
+There is a class Authenticate which works for user login and creatre account portal.
+
+
+As mentioned before folder containing three text files namely usedDetails , upcomingRides, pastRides will be traversed and printed in a good format on user dashboard page. 
+Also Various options will be displayed to user like 
