@@ -140,7 +140,7 @@ public:
         cout << "||_____________________________________________________________________||\n";
         cout << "ENTER YOUR CHOICE: ";
         int choice;
-        cin >> choice;
+        cin>>choice;
         cout << "\nLoading.....\n";
         Sleep(1000);
         return choice;
@@ -181,7 +181,6 @@ int main()
     string filename = "Credentials.txt";
     Pages page;
     int choice = page.homePage();
-    page.thankYouPage();
     LoginManager login(filename);
     // homePage() function returns the choice of the user
     // MENU: 1 for login and 2 for create account and 3 or any other number for exit
@@ -208,7 +207,7 @@ int main()
     case 2:
         RegistrationManager::registerUser(filename);
         break;
-    default:
+    case 3:
         page.thankYouPage();
     }
     return 0;
