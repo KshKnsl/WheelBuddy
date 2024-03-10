@@ -14,35 +14,33 @@ private:
     string password;
 
 public:
-    User(const string &uname, const string &pwd)
+    User(string uname, string pwd)
     {
         username = uname;
         password = pwd;
     }
 
-    string getUsername() const // Make it const
+    string getUsername()
     {
         return username;
     }
 
-    string getPassword() const // Make it const
+    string getPassword()
     {
         return password;
     }
 
-    bool checkCredentials(const string &uname, const string &pwd) const // Make it const
+    bool checkCredentials(string uname,string pwd)
     {
         return (username == uname && password == pwd);
     }
 };
-
 class LoginManager
 {
 private:
     vector<User> users;
-
 public:
-    LoginManager(const string &filename)
+    LoginManager(string filename)
     {
         ifstream fileIn(filename);
         if (!fileIn.is_open())
@@ -53,13 +51,11 @@ public:
         string username, password;
         while (fileIn >> username >> password)
             users.push_back(User(username, password));
-
         fileIn.close();
     }
-
-    bool authenticate(const string &uname, const string &pwd) const
+    bool authenticate(string uname,string pwd)
     {
-        for (const auto &user : users)
+        for(auto &user : users)
         {
             if (user.checkCredentials(uname, pwd))
             {
@@ -68,13 +64,38 @@ public:
         }
         return false;
     }
+    User* loginScreen()
+    {
+        system("cls");
+        cout << "**************************************\n";
+        cout << "*                 Login              *\n";
+        cout << "**************************************\n";
+        string username, password;
+        cout << "Enter username: ";
+        cin>>username;
+        cout << "Enter password: ";
+        cin>>password;
+        User *ob = new User(username, password);
+        if(authenticate(username, password))
+            return ob;
+        else
+        {
+            User *o = new User("null","null");
+            return o;
+        }
+    }
 };
 
 class RegistrationManager
 {
 public:
-    static void registerUser(const string &filename)
+    static void registerUser(string filename)
     {
+        system("cls");
+        system("color 8D");
+        cout << "*****************************************\n";
+        cout << "*         CREATE A NEW ACCOUNT          *\n";
+        cout << "*****************************************\n";
         string username, password;
         cout << "Enter a new username: ";
         cin >> username;
@@ -88,26 +109,21 @@ public:
             fileOut.close();
             cout << "Account created successfully!\n";
         }
-        else{
+        else
+        {
              cerr << "Error: Unable to open file for user data." << endl;
              return;
         }
+        system("cls");
     }
 };
-
-string getUserInput(const string &prompt)
-{
-    cout << prompt;
-    string input;
-    cin >> input;
-    return input;
-}
 
 class Pages // Define Pages class before main
 {
 public:
     void fileLoadingPage()
     {
+        system("color 6B");
         ifstream in("CodeFiles/Welcome.txt"); // displaying welcome ASCII image text on output screen fn1353
         char str[1000];
         while (in)
@@ -126,8 +142,7 @@ public:
     // this function returns the choice of the user
     int homePage()
     {
-        fileLoadingPage();
-        system("color 2A");
+        system("color 7A");
         cout << "\n  _____________________________________________________________________\n";
         cout << "||                                                                     ||\n";
         cout << "||   \\      /\\      / |===== |      |====== /=====\\ |\\    /| |=====    ||\n";
@@ -177,42 +192,64 @@ public:
         }
     }
 };
-
 int main()
 {
-    string filename = "Credentials.txt";
     Pages page;
-    int choice = page.homePage();
-    LoginManager login(filename);
-    // homePage() function returns the choice of the user
-    // MENU: 1 for login and 2 for create account and 3 or any other number for exit
-    string username, password;
-    switch (choice)
+    bool loggedIn = false;
+    bool exitProgramFlag = false;  // Flag to indicate if the program should exit
+    page.fileLoadingPage();
+    string filename = "Files/Credentials.txt";
+    int choice;
+
+    do
     {
-    case 1:
-        cout << "Enter username: ";
-        username = getUserInput("");
-        cout << "Enter password: ";
-        password = getUserInput("");
-        if (login.authenticate(username, password))
-            cout << "Login successful. Welcome, " << username << "!\n";
-        else
+        choice = page.homePage();
+        switch (choice)
         {
-            cout << "Login failed. Incorrect username or password.\n";
-            cout << "Do you want to create a new account? (yes/no): ";
-            string response;
-            response = getUserInput("");
-            if (response == "yes")
+            case 1:
+            {
+                LoginManager login(filename);
+                User *user = login.loginScreen();
+                if (user->getUsername() != "null" && user->getPassword() != "null")
+                {
+                     cout << "*************************************************\n";
+                     cout << "*    Login Successful, welcome to WheelBuddy    *\n";
+                     cout << "*************************************************\n";
+                     loggedIn = true;
+                }
+                else
+                {
+                    cout << "Login failed. Incorrect username or password.\n";
+                    cout << "Do you want to create a new account? (yes/no): ";
+                    string response;
+                    cin >> response;
+
+                    if (response == "yes")
+                    {
+                        RegistrationManager::registerUser(filename);
+                        choice = 1;
+                    }
+                    else
+                    {
+                        exitProgramFlag = true;
+                    }
+                }
+                break;
+            }
+            case 2:
                 RegistrationManager::registerUser(filename);
+                choice = 1;
+                break;
+            case 3:
+                exitProgramFlag = true;
+                break;
         }
-        break;
-    case 2:
-        RegistrationManager::registerUser(filename);
-        cout<<"Now you will be guided to the login page.Enter your credentials there in order to LOGIN\n";
-        page.homePage();
-        break;
-    case 3:
-        page.thankYouPage();
-    }
+
+        if (exitProgramFlag)
+        {
+            page.thankYouPage();
+            break;  // Break out of the loop after calling exitProgram()
+        }
+    }while (!loggedIn);
     return 0;
 }
