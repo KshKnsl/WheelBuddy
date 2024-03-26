@@ -1,4 +1,4 @@
-| Date       | Time   | Source City | Destination City | Fare (₹) | Distance (km) |
+| Date       | Time   | Source City | Destination City | Fare(Rs) | Distance (km) |
 |------------|--------|-------------|------------------|----------|---------------|
 | 2023-12-20 | 08:00  | Mumbai      | Delhi            | 1200     | 1200          |
 | 2023-12-25 | 12:30  | Mumbai      | Bangalore        | 980      | 980           |

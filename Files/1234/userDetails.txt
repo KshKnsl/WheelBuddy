@@ -8,4 +8,4 @@ Phone: +91 1234567890
 Aadhar Card No: 1234 5678 9012
 Member Since: 2023-01-15
 Total Rides Taken: 8
-Total Amount Spent: ₹1200.00
+Total Amount Spent: Rs. 1200.00
