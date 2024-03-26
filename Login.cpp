@@ -140,6 +140,45 @@ public:
         // Close the files
         pastRidesFile.close();
         upcomingRidesFile.close();
+
+        string username, fullName, age, gender, email, address, phone, aadharNo, memberSince, ridesTaken, amountSpent;
+
+        username = folderName;
+        cout << "Enter Full Name: ";
+        getline(cin, fullName);
+        cout << "Enter Age: ";
+        getline(cin, age);
+        cout << "Enter Gender: ";
+        getline(cin, gender);
+        cout << "Enter Email: ";
+        getline(cin, email);
+        cout << "Enter Address: ";
+        getline(cin, address);
+        cout << "Enter Phone: ";
+        getline(cin, phone);
+        cout << "Enter Aadhar Card No: ";
+        getline(cin, aadharNo);
+        cout << "Enter Member Since (YYYY-MM-DD): ";
+        getline(cin, memberSince);
+        cout << "Enter Total Rides Taken: ";
+        getline(cin, ridesTaken);
+        cout << "Enter Total Amount Spent: ";
+        getline(cin, amountSpent);
+
+        // Write user details to file
+        userDetailsFile << "Username: " << username << endl;
+        userDetailsFile << "Full Name: " << fullName << endl;
+        userDetailsFile << "Age: " << age << endl;
+        userDetailsFile << "Gender: " << gender << endl;
+        userDetailsFile << "Email: " << email << endl;
+        userDetailsFile << "Address: " << address << endl;
+        userDetailsFile << "Phone: " << phone << endl;
+        userDetailsFile << "Aadhar Card No: " << aadharNo << endl;
+        userDetailsFile << "Member Since: " << memberSince << endl;
+        userDetailsFile << "Total Rides Taken: " << ridesTaken << endl;
+        userDetailsFile << "Total Amount Spent: Rs. " << amountSpent << endl;
+
+        // Close the file
         userDetailsFile.close();
     }
 };
