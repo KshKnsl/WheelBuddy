@@ -1,0 +1,11 @@
+Username: user123
+Full Name: Ravi Kumar
+Age: 30
+Gender: Male
+Email: ravi.kumar@example.com
+Address: 123, Main Street, Bangalore, Karnataka, India
+Phone: +91 1234567890
+Aadhar Card No: 1234 5678 9012
+Member Since: 2023-01-15
+Total Rides Taken: 8
+Total Amount Spent: ₹1200.00
