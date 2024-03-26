@@ -2,11 +2,16 @@
 #include <fstream>
 #include <string>
 #include <vector>
+<<<<<<< HEAD
 #include <windows.h> //for usleep function
 #include <stdio.h>// for mkdir
 #include <io.h>//for mkdir
 #include <iomanip>//for setw
 
+=======
+#include <windows.h>
+#include <sys/stat.h>
+>>>>>>> a1ae73c1667aaeea090d7ab9413edca2d8c888a5
 using namespace std;
 
 class Pages; // Forward declaration
@@ -39,6 +44,7 @@ public:
         return (username == uname && password == pwd);
     }
 };
+
 class LoginManager
 {
 
@@ -98,19 +104,20 @@ class RegistrationManager
 {
 
 public:
-    static void registerUser(string filename)
-    {
-        system("cls");
-        system("color 8D");
-        cout << "*****************************************\n";
-        cout << "*         CREATE A NEW ACCOUNT          *\n";
-        cout << "*****************************************\n";
-        string username, password;
-        cout << "Enter a new username: ";
-        cin >> username;
-        cout << "Enter a new password: ";
-        cin >> password;
+  static void registerUser(string& filename)
+{
+    system("cls");
+    system("color 8D");
+    cout << "*****************************************\n";
+    cout << "*         CREATE A NEW ACCOUNT          *\n";
+    cout << "*****************************************\n";
+    string username, password;
+    cout << "Enter a new username: ";
+    cin >> username;
+    cout << "Enter a new password: ";
+    cin >> password;
 
+<<<<<<< HEAD
         ofstream fileOut(filename, ios::app);
         if (fileOut.is_open())
         {
@@ -142,6 +149,60 @@ public:
         userDetailsFile.close();
     }
 };
+=======
+    // Write username and password to the credentials file
+    ofstream fileOut(filename, ios::app);
+    if (fileOut.is_open())
+    {
+        fileOut << username << " " << password << endl;
+        fileOut.close();
+        cout << "Account created successfully!\n"; // Moved the output here
+    }
+    else
+    {
+         cerr << "Error: Unable to open file for user data." << endl;
+         return;
+    }
+
+    // Create directory for the user
+    string userDirectory = "Files/Users/" + username; // Fixed directory path
+    if (mkdir(userDirectory.c_str()) != 0)
+    {
+        cerr << "Error: Unable to create user directory." << endl;
+        return;
+    }
+
+    // Create files in the user directory
+    string userDetailsFile = userDirectory + "/usedDetails.txt";
+    ofstream userDetails(userDetailsFile);
+    if (!userDetails.is_open())
+    {
+        cerr << "Error: Unable to create usedDetails.txt file." << endl;
+        return;
+    }
+    userDetails.close();
+
+    string upcomingRidesFile = userDirectory + "/upcomingRides.txt";
+    ofstream upcomingRides(upcomingRidesFile);
+    if (!upcomingRides.is_open())
+    {
+        cerr << "Error: Unable to create upcomingRides.txt file." << endl;
+        return;
+    }
+    upcomingRides.close();
+
+    string pastRidesFile = userDirectory + "/pastRides.txt";
+    ofstream pastRides(pastRidesFile);
+    if (!pastRides.is_open())
+    {
+        cerr << "Error: Unable to create pastRides.txt file." << endl;
+        return;
+    }
+    pastRides.close();
+
+    system("cls");
+}
+>>>>>>> a1ae73c1667aaeea090d7ab9413edca2d8c888a5
 
 class Pages // Define Pages class before main
 {
