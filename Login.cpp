@@ -146,6 +146,7 @@ public:
         username = folderName;
         cout << "Enter Full Name: ";
         getline(cin, fullName);
+        getline(cin, fullName);
         cout << "Enter Age: ";
         getline(cin, age);
         cout << "Enter Gender: ";
