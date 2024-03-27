@@ -5,4 +5,3 @@
 | G5H6I      | 2024-01-05 | 09:15  | Mumbai      | Kolkata          | 6              | 5                  | Maruti Swift | 1960     | 1960          |
 | J7K8L      | 2024-01-10 | 19:00  | Mumbai      | Chennai          | 5              | 4                  | Hyundai i20  | 1340     | 1340          |
 | M9N0O      | 2024-02-02 | 16:45  | Mumbai      | Hyderabad        | 3              | 3                  | Ford Figo    | 620      | 620           |
-| M9N0O      | 2024-02-02 | 16:45  | Mumbai      | Hyderabad        | 3              | 0                  |              | 0        | 0             |
