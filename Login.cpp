@@ -565,10 +565,11 @@ int main()
         }
     }while (!loggedIn);
  
+    //demo to use bill calculator
+    // BillCalculator calcob;
+    // int distance = calcob.calculateDistance("Mumbai","Pune");
+    // calcob.printBill("Mumbai","Pune",distance,5);
 
-    BillCalculator calcob;
-    int distance = calcob.calculateDistance("Mumbai","Pune");
-    calcob.printBill("Mumbai","Pune",distance,5);
 
     Ride ride("| M9N0O      | 2024-02-02 | 16:45  | Mumbai      | Hyderabad        | 3              | 3                  | Ford Figo    | 620      | 620           |");
     cout << "Ride Details: " << ride.toString() << endl;
