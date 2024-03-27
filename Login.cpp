@@ -6,6 +6,9 @@
 #include <stdio.h>// for mkdir
 #include <io.h>//for mkdir
 #include <iomanip>//for setw
+#include <sstream>// FOR TOSTRING FUNCTION() OF RIDE CLASS
+#include <cstdlib>//RANDOM NUMBER
+#include <ctime>//RANDOM NUMBER
 
 using namespace std;
 
@@ -133,10 +136,10 @@ public:
         ofstream pastRidesFile(folderPath + "/pastRides.txt");
         ofstream upcomingRidesFile(folderPath + "/upcomingRides.txt");
         ofstream userDetailsFile(folderPath + "/userDetails.txt");
-        pastRidesFile <<     "| Date       | Time   | Source City | Destination City | Fare(Rs) | Distance (km) |" << endl;
-        pastRidesFile <<     "|------------|--------|-------------|------------------|----------|---------------|" << endl;
-        upcomingRidesFile << "| Date       | Time   | Source City | Destination City | Fare(Rs) | Distance (km) |" << endl;        
-        upcomingRidesFile << "|------------|--------|-------------|------------------|----------|---------------|" << endl;        
+        pastRidesFile <<     "| Ride ID    | Date       | Time   | Source City | Destination City | Max Passengers | Current Passengers | Car Model    | Fare(Rs) | Distance (km) |" << endl;
+        pastRidesFile <<     "|------------|------------|--------|-------------|------------------|----------------|--------------------|--------------|----------|---------------|" << endl;
+        upcomingRidesFile << "| Ride ID    | Date       | Time   | Source City | Destination City | Max Passengers | Current Passengers | Car Model    | Fare(Rs) | Distance (km) |" << endl;        
+        upcomingRidesFile << "|------------|------------|--------|-------------|------------------|----------------|--------------------|--------------|----------|---------------|" << endl;        
         // Close the files
         pastRidesFile.close();
         upcomingRidesFile.close();
@@ -190,6 +193,7 @@ public:
 
     void fileLoadingPage()
     {
+        system("cls");
         system("color 6B");
         ifstream in("CodeFiles/Welcome.txt"); // displaying welcome ASCII image text on output screen fn1353
         char str[1000];
@@ -286,23 +290,23 @@ public:
         cout << "----------------------------------------------------------------------\n" << endl;
         file.close();
         cout << "Past Rides Details:" << endl;
-        cout << "\t-----------------------------------------------------------------------------------" << endl;filename = "Files/" + username + "/pastRides.txt";
+        cout << "\t-----------------------------------------------------------------------------------------------------------------------------------------------------" << endl;filename = "Files/" + username + "/pastRides.txt";
         ifstream file2(filename);
         while (getline(file2, line))
         {
             cout << "\t" << line << endl;
         }
-        cout << "\t-----------------------------------------------------------------------------------\n" << endl;
+        cout << "\t-----------------------------------------------------------------------------------------------------------------------------------------------------\n" << endl;
         file2.close();
         cout << "Upcoming Rides Details:" << endl;
-        cout << "\t-----------------------------------------------------------------------------------" << endl;
+        cout << "\t-----------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
         filename = "Files/" + username + "/upcomingRides.txt";
         ifstream file3(filename);
         while (getline(file3, line))
         {
             cout << "\t" << line << endl;
         }
-        cout << "\t-----------------------------------------------------------------------------------\n" << endl;
+        cout << "\t-----------------------------------------------------------------------------------------------------------------------------------------------------\n" << endl;
         file3.close();
     }
 };
@@ -395,12 +399,106 @@ class BillCalculator
         cout<<"\t\t\t\t\t\t" << "|                                                              |" << endl;
         cout<<"\t\t\t\t\t\t" << setw(60) << "|   # This is a computer-generated invoice and it does not     |" << endl;
         cout<<"\t\t\t\t\t\t" << setw(60) << "|     require an authorized signature #                        |" << endl;
+        cout<<"\t\t\t\t\t\t" << "|                                                              |" << endl;
         cout<<"\t\t\t\t\t\t" << setw(60) << "|//////////////////////////////////////////////////////////////|" << endl;
         cout<<"\t\t\t\t\t\t" << setw(60) << "|You are advised to pay up the amount before the due date.     |" << endl;
         cout<<"\t\t\t\t\t\t" << setw(60) << "|\t\tOtherwise, a penalty fee will be applied       |" << endl;
         cout<<"\t\t\t\t\t\t" << setw(60) << "|//////////////////////////////////////////////////////////////|" << endl;
+        cout<<"\t\t\t\t\t\t" << "|                                                              |" << endl;
         cout<<"\t\t\t\t\t\t" << setw(60) << "************************** Thank You! **************************\n";
     }
+};
+
+class Ride 
+{
+private:
+    string rideID;
+    string date;
+    string time;
+    string sourceCity;
+    string destinationCity;
+    int maxPassengers;
+    int currentPassengers;
+    string carModel;
+    double fare;
+    double distance;
+
+public:
+    Ride() {}
+
+    Ride(string s) 
+    {
+        stringstream ss(s);
+        string temp;
+        getline(ss, temp, '|'); // Skip first |
+        ss >> ws; // Skip whitespaces
+        getline(ss, rideID, '|');
+        ss >> ws; // Skip whitespaces
+        getline(ss, date, '|');
+        ss >> ws; // Skip whitespaces
+        getline(ss, time, '|');
+        ss >> ws; // Skip whitespaces
+        getline(ss, sourceCity, '|');
+        ss >> ws; // Skip whitespaces
+        getline(ss, destinationCity, '|');
+        ss >> ws; // Skip whitespaces
+        ss >> maxPassengers;
+        ss.ignore(1, '|');
+        ss >> ws; // Skip whitespaces
+        ss >> currentPassengers;
+        ss.ignore(1, '|');
+        ss >> ws; // Skip whitespaces
+        getline(ss, carModel, '|');
+        ss >> ws; // Skip whitespaces
+        ss >> fare;
+        ss.ignore(1, '|');
+        ss >> ws; // Skip whitespaces
+        ss >> distance;
+    }
+Ride(string date, string time, string sourceCity, string destinationCity,
+        int maxPassengers, int currentPassengers, string carModel, double fare, double distance) 
+    {
+        this->rideID = generateRandomRideID();
+        this->date = date;
+        this->time = time;
+        this->sourceCity = sourceCity;
+        this->destinationCity = destinationCity;
+        this->maxPassengers = maxPassengers;
+        this->currentPassengers = currentPassengers;
+        this->carModel = carModel;
+        this->fare = fare;
+        this->distance = distance;
+    }
+
+    string generateRandomRideID() 
+    {
+        const string alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        const int idLength = 5;
+        string id;
+        srand(std::time(0)); // Specify the namespace for time()
+        for (int i = 0; i < idLength; ++i) 
+        {
+            id += alphanumeric[rand() % alphanumeric.length()];
+        }
+        return id;
+    }
+
+    string getRideID()
+    {
+        return rideID;
+    }
+
+    string toString()
+    {
+        stringstream ss;
+        ss << "| " << setw(10) << left << rideID << "| " << setw(10) << left << date << "| " << setw(6) << left << time << "| "
+        << setw(11) << left << sourceCity << "| " << setw(16) << left << destinationCity << "| " << setw(14) << left << maxPassengers
+        << " | " << setw(18) << left << currentPassengers << " | " << setw(12) << left << carModel << " | " << setw(7) << left << fare
+        << "  | " << setw(13) << left << distance << " |";
+        return ss.str();
+    }
+
+
 };
 
 int main()
@@ -466,8 +564,13 @@ int main()
             break;  // Break out of the loop after calling exitProgram()
         }
     }while (!loggedIn);
+ 
+
     BillCalculator calcob;
-    int distance = calcob.calculateDistance("Delhi","Mumbai");
-    calcob.printBill("Delhi","Mumbai",distance,5);
+    int distance = calcob.calculateDistance("Mumbai","Pune");
+    calcob.printBill("Mumbai","Pune",distance,5);
+
+    Ride ride("| M9N0O      | 2024-02-02 | 16:45  | Mumbai      | Hyderabad        | 3              | 3                  | Ford Figo    | 620      | 620           |");
+    cout << "Ride Details: " << ride.toString() << endl;
     return 0;
 }
