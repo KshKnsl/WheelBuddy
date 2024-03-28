@@ -195,7 +195,7 @@ public:
     {
         system("cls");
         system("color 6B");
-        ifstream in("CodeFiles/Welcome.txt"); // displaying welcome ASCII image text on output screen fn1353
+        ifstream in("CodeRelatedFiles/Welcome.txt"); // displaying welcome ASCII image text on output screen fn1353
         char str[1000];
         while (in)
         {
@@ -424,7 +424,10 @@ private:
     double distance;
 
 public:
-    Ride() {}
+    Ride() 
+    {
+        //do nothing
+    }
 
     Ride(string s) 
     {
@@ -442,20 +445,23 @@ public:
         ss >> ws; // Skip whitespaces
         getline(ss, destinationCity, '|');
         ss >> ws; // Skip whitespaces
-        ss >> maxPassengers;
-        ss.ignore(1, '|');
+        getline(ss, temp, '|');
+        maxPassengers = stoi(temp);
         ss >> ws; // Skip whitespaces
-        ss >> currentPassengers;
-        ss.ignore(1, '|');
+        getline(ss, temp, '|');
+        currentPassengers = stoi(temp);
         ss >> ws; // Skip whitespaces
         getline(ss, carModel, '|');
         ss >> ws; // Skip whitespaces
-        ss >> fare;
-        ss.ignore(1, '|');
+        getline(ss, temp, '|');
+        fare = stod(temp);
         ss >> ws; // Skip whitespaces
-        ss >> distance;
+        getline(ss, temp, '|');
+        distance = stod(temp);
+        // Convert string values to integer or double
     }
-Ride(string date, string time, string sourceCity, string destinationCity,
+
+    Ride(string date, string time, string sourceCity, string destinationCity,
         int maxPassengers, int currentPassengers, string carModel, double fare, double distance) 
     {
         this->rideID = generateRandomRideID();
@@ -493,7 +499,7 @@ Ride(string date, string time, string sourceCity, string destinationCity,
         stringstream ss;
         ss << "| " << setw(10) << left << rideID << "| " << setw(10) << left << date << "| " << setw(6) << left << time << "| "
         << setw(11) << left << sourceCity << "| " << setw(16) << left << destinationCity << "| " << setw(14) << left << maxPassengers
-        << " | " << setw(18) << left << currentPassengers << " | " << setw(12) << left << carModel << " | " << setw(7) << left << fare
+        << " | " << setw(18) << left << currentPassengers << " | " << setw(11) << left << carModel << "| " << setw(7) << left << fare
         << "  | " << setw(13) << left << distance << " |";
         return ss.str();
     }
@@ -507,7 +513,7 @@ int main()
     bool loggedIn = false;
     bool exitProgramFlag = false;  // Flag to indicate if the program should exit
     page.fileLoadingPage();
-    string filename = "Files/Credentials.txt";
+    string filename = "CodeRelatedFiles/Credentials.txt";
     int choice;
     do
     {
@@ -570,8 +576,8 @@ int main()
     // int distance = calcob.calculateDistance("Mumbai","Pune");
     // calcob.printBill("Mumbai","Pune",distance,5);
 
-
-    Ride ride("| M9N0O      | 2024-02-02 | 16:45  | Mumbai      | Hyderabad        | 3              | 3                  | Ford Figo    | 620      | 620           |");
-    cout << "Ride Details: " << ride.toString() << endl;
+    //Demo to use the ride class functions
+    // Ride ride("| A1B2C      | 2023-12-20 | 08:00  | Mumbai      | Delhi            | 4              | 3                  | Toyota Camry | 1200     | 1200          |");
+    // cout << "Ride Details: " << ride.toString() << endl;
     return 0;
 }
