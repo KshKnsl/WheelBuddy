@@ -9,6 +9,7 @@
 #include <sstream>// FOR TOSTRING FUNCTION() OF RIDE CLASS
 #include <cstdlib>//RANDOM NUMBER
 #include <ctime>//RANDOM NUMBER
+#include <algorithm>
 
 using namespace std;
 
@@ -198,6 +199,7 @@ public:
             in.getline(str, 1000); // delim defaults to '\n' cp
             if (in)   cout << str << endl;
         }
+
         in.close();
         Sleep(1000);
         cout << "\nStarting the program please wait....." << endl;
@@ -271,7 +273,7 @@ class Dashboard
 {
 public:
 
-    void display(const string username)
+    void display(string username)
     {
         system("color 9D");
         cout << "*************************** User Dashboard ***************************" << endl;
@@ -313,6 +315,7 @@ class BillCalculator
     const double MAINTENANCE_COST_PER_KM = 0.8;
     const double TOLL_COST_PER_KM = 2.0;
     // Simple distance lookup table for preset supported Indian cities
+
     string distanceLookup[110][3] =
     {
         {"Mumbai", "Delhi", "1200"}, {"Mumbai", "Bangalore", "980"}, {"Mumbai", "Kolkata", "1960"}, {"Mumbai", "Chennai", "1340"}, 
@@ -346,6 +349,7 @@ class BillCalculator
         {"Bhopal", "Bangalore", "1230"}, {"Bhopal", "Kolkata", "1450"}, {"Bhopal", "Chennai", "1650"}, {"Bhopal", "Hyderabad", "1020"}, 
         {"Bhopal", "Pune", "1030"}, {"Bhopal", "Jaipur", "580"}, {"Bhopal", "Ahmedabad", "650"}, {"Bhopal", "Lucknow", "650"}
     };
+
     public:
     int calculateDistance(string source, string destination)
     {
@@ -358,6 +362,7 @@ class BillCalculator
         }
         return 0;
     }
+
     // Function to calculate the total cost based on distance, car capacity, and fixed costs
     double calculateTotalCost(int distance, int carCapacity)
     {
@@ -378,6 +383,7 @@ class BillCalculator
         cout<<"\n";
         cout<<"\n";
         cout<<"\t\t\t\t\t\t" << "\n";
+
         cout<<"\t\t\t\t\t\t" << setw(60) << "|************************* Trip Bill **************************|\n";
         cout<<"\t\t\t\t\t\t" << "|                                                              |" << endl;
         cout<<"\t\t\t\t\t\t" << "|\tSource City: \t\t" << setw(25) << left << source << "      |"<<endl;
@@ -402,12 +408,13 @@ class BillCalculator
         cout<<"\t\t\t\t\t\t" << setw(60) << "|//////////////////////////////////////////////////////////////|" << endl;
         cout<<"\t\t\t\t\t\t" << "|                                                              |" << endl;
         cout<<"\t\t\t\t\t\t" << setw(60) << "************************** Thank You! **************************\n";
+
     }
 };
 
 class Ride 
 {
-private:
+    private:
     string rideID;
     string date;
     string time;
@@ -471,6 +478,7 @@ public:
         this->fare = fare;
         this->distance = distance;
     }
+    
     string getRideID()      {        return rideID;     }
     string getDate()        {        return date;       }
     string getTime()        {        return time;       }
@@ -482,13 +490,13 @@ public:
     double getFare()        {        return fare;       }
     double getDistance()    {        return distance;   }
 
-
     string generateRandomRideID() 
     {
-        const string alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        const int idLength = 5;
+        string alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        int idLength = 5;
         string id;
         srand(std::time(0)); // Specify the namespace for time()
+        
         for (int i = 0; i < idLength; ++i) 
         {
             id += alphanumeric[rand() % alphanumeric.length()];
@@ -499,11 +507,106 @@ public:
     string toString()
     {
         stringstream ss;
+        
         ss << "| " << setw(10) << left << rideID << "| " << setw(10) << left << date << "| " << setw(6) << left << time << "| "
         << setw(11) << left << sourceCity << "| " << setw(16) << left << destinationCity << "| " << setw(14) << left << maxPassengers
         << " | " << setw(18) << left << currentPassengers << " | " << setw(11) << left << carModel << "| " << setw(7) << left << fare
         << "  | " << setw(13) << left << distance << " |";
         return ss.str();
+
+    }
+};
+
+
+// Parser is the class responsible for sorting rides based on their date and time.
+// This class also manages the movement of completed rides to the past rides file, ensuring that the upcoming rides file contains only future rides.
+// This segregation facilitates the implementation of features such as carpooling and ensures that users have access to relevant and timely ride information.
+
+class Parser 
+{
+    public:
+    
+    void sortRides(string upcoming, string past) 
+    {
+        vector<Ride> upcomingRides = parseRides(upcoming);
+        vector<Ride> pastRides = parseRides(past);
+
+        // Remove upcoming rides older than or equal to the current date and time
+        time_t currentTime = time(nullptr);
+        struct tm* now = localtime(&currentTime);
+        int currentYear = now->tm_year + 1900;
+        int currentMonth = now->tm_mon + 1;
+        int currentDay = now->tm_mday;
+        int currentHour = now->tm_hour;
+
+        vector<Ride> newUpcomingRides;
+        for (auto it = upcomingRides.begin(); it != upcomingRides.end();) 
+        {
+            string rideDate = it->getDate();
+            string rideTime = it->getTime();
+
+            // Parse ride date
+            int rideYear, rideMonth, rideDay;
+            sscanf(rideDate.c_str(), "%d-%d-%d", &rideYear, &rideMonth, &rideDay);
+
+            // Parse ride time
+            int rideHour, rideMinute;
+            sscanf(rideTime.c_str(), "%d:%d", &rideHour, &rideMinute);
+
+            // Compare dates
+            if (rideYear > currentYear || (rideYear == currentYear && rideMonth > currentMonth) 
+            || (rideYear == currentYear && rideMonth == currentMonth && rideDay > currentDay) 
+            || (rideYear == currentYear && rideMonth == currentMonth && rideDay == currentDay && rideHour > currentHour)) 
+            {
+                newUpcomingRides.push_back(*it);
+                it = upcomingRides.erase(it);
+            } 
+            else 
+            {
+                pastRides.push_back(*it);
+                it = upcomingRides.erase(it);
+            }
+        }
+
+        // Sort rides based on date for upcoming and past rides
+        sort(pastRides.begin(), pastRides.end(), [](Ride& a, Ride& b) { return a.getDate() < b.getDate() || (a.getDate() == b.getDate() && a.getTime() < b.getTime()); });
+        sort(newUpcomingRides.begin(), newUpcomingRides.end(), [](Ride& a, Ride& b) { return a.getDate() < b.getDate() || (a.getDate() == b.getDate() && a.getTime() < b.getTime()); });
+
+        // Write upcoming and past rides to their respective files
+        writeRides(upcoming, newUpcomingRides);
+        writeRides(past, pastRides);
+    }
+
+    vector<Ride> parseRides(string fileName) 
+    {
+        vector<Ride> rides;
+        ifstream file(fileName);
+        string line;
+  
+        getline(file, line);//skip header 
+        getline(file, line);//skip ---------- 
+  
+        while (getline(file, line)) 
+        {
+            Ride ride(line);
+            rides.push_back(ride);
+        }
+        file.close();
+        return rides;
+    }
+
+    void writeRides(string fileName,vector<Ride>& rides) 
+    {
+        ofstream file(fileName);
+        file <<"| Ride ID    | Date       | Time   | Source City | Destination City | Max Passengers | Current Passengers | Car Model    | Fare(Rs) | Distance (km) |" << endl;
+        file <<"|------------|------------|--------|-------------|------------------|----------------|--------------------|--------------|----------|---------------|" << endl;
+  
+        for(Ride& ride : rides) 
+        {
+            file << ride.toString() << endl;
+        }
+  
+        file.close();
     }
 };
 
@@ -514,6 +617,7 @@ int main()
     bool exitProgramFlag = false;  // Flag to indicate if the program should exit
     page.fileLoadingPage();
     User *user;
+    
     string filename = "CodeRelatedFiles/Credentials.txt";
     int choice = page.homePage();
     do
@@ -532,9 +636,6 @@ int main()
                      loggedIn = true;
                      Sleep(3000);
                      system("cls");
-                     Dashboard dash;
-                     dash.display(user->getUsername());
-                     Sleep(10000);
                 }
                 else
                 {
@@ -555,11 +656,13 @@ int main()
                 }
                 break;
             }
+    
             case 2:
                 RegistrationManager::registerUser(filename);
                 choice = 1;
                 exitProgramFlag = false;
                 break;
+    
             case 3:
                 exitProgramFlag = true;
                 break;
@@ -572,14 +675,26 @@ int main()
         }
     }while (!loggedIn);
  
-
- 
     if(loggedIn==true)
     {
-        string folderLocName = "./Files/1234"; // Replace with actual folder name
+        //Parsing is the class for sorting the rides based on their time and date
+        //Also this class moves the finished rides to a different rides so upcoming rides has only coming rides data which can be further used to implement the features of carpooling
+        //after logging in run the parser first
+        string folderLocName = "./Files/" + user->getUsername(); // Replace with actual folder name
         Parser parser;
         parser.sortRides(folderLocName + "/upcomingRides.txt", folderLocName + "/pastRides.txt");
+        //Also run the parser for the admin
+        folderLocName = "./Files/admin";
+        parser.sortRides(folderLocName + "/upcomingRides.txt", folderLocName + "/pastRides.txt");
+
+        //Now display the dashboard
+        Dashboard dash;
+        dash.display(user->getUsername());
+        Sleep(5000);
     }
+ 
+ 
+ 
     //demo to use bill calculator
     // BillCalculator calcob;
     // int distance = calcob.calculateDistance("Mumbai","Pune");
@@ -588,5 +703,6 @@ int main()
     //Demo to use the ride class functions
     // Ride ride("| A1B2C      | 2023-12-20 | 08:00  | Mumbai      | Delhi            | 4              | 3                  | Toyota Camry | 1200     | 1200          |");
     // cout << "Ride Details: " << ride.toString() << endl;
+    page.thankYouPage();
     return 0;
 }
