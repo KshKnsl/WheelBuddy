@@ -164,11 +164,7 @@ public:
         getline(cin, aadharNo);
         cout << "Enter Member Since (YYYY-MM-DD): ";
         getline(cin, memberSince);
-        cout << "Enter Total Rides Taken: ";
-        getline(cin, ridesTaken);
-        cout << "Enter Total Amount Spent: ";
-        getline(cin, amountSpent);
-
+        
         // Write user details to file
         userDetailsFile << "Username: " << username << endl;
         userDetailsFile << "Full Name: " << fullName << endl;
@@ -179,8 +175,8 @@ public:
         userDetailsFile << "Phone: " << phone << endl;
         userDetailsFile << "Aadhar Card No: " << aadharNo << endl;
         userDetailsFile << "Member Since: " << memberSince << endl;
-        userDetailsFile << "Total Rides Taken: " << ridesTaken << endl;
-        userDetailsFile << "Total Amount Spent: Rs. " << amountSpent << endl;
+        userDetailsFile << "Total Rides Taken: " << 0 << endl;
+        userDetailsFile << "Total Amount Spent: Rs. " << 0 << endl;
 
         // Close the file
         userDetailsFile.close();
@@ -475,6 +471,17 @@ public:
         this->fare = fare;
         this->distance = distance;
     }
+    string getRideID()      {        return rideID;     }
+    string getDate()        {        return date;       }
+    string getTime()        {        return time;       }
+    string getSourceCity()  {        return sourceCity; }
+    string getDestinationCity() {    return destinationCity;  }
+    int getMaxPassengers()      {    return maxPassengers;    }
+    int getCurrentPassengers()  {    return currentPassengers;}
+    string getCarModel()    {        return carModel;   }
+    double getFare()        {        return fare;       }
+    double getDistance()    {        return distance;   }
+
 
     string generateRandomRideID() 
     {
@@ -489,11 +496,6 @@ public:
         return id;
     }
 
-    string getRideID()
-    {
-        return rideID;
-    }
-
     string toString()
     {
         stringstream ss;
@@ -503,8 +505,6 @@ public:
         << "  | " << setw(13) << left << distance << " |";
         return ss.str();
     }
-
-
 };
 
 int main()
@@ -513,17 +513,17 @@ int main()
     bool loggedIn = false;
     bool exitProgramFlag = false;  // Flag to indicate if the program should exit
     page.fileLoadingPage();
+    User *user;
     string filename = "CodeRelatedFiles/Credentials.txt";
-    int choice;
+    int choice = page.homePage();
     do
     {
-        choice = page.homePage();
         switch (choice)
         {
             case 1:
             {
                 LoginManager login(filename);
-                User *user = login.loginScreen();
+                user = login.loginScreen();
                 if (user->getUsername() != "null" && user->getPassword() != "null")
                 {
                      cout << "*************************************************\n";
@@ -558,6 +558,7 @@ int main()
             case 2:
                 RegistrationManager::registerUser(filename);
                 choice = 1;
+                exitProgramFlag = false;
                 break;
             case 3:
                 exitProgramFlag = true;
@@ -571,6 +572,14 @@ int main()
         }
     }while (!loggedIn);
  
+
+ 
+    if(loggedIn==true)
+    {
+        string folderLocName = "./Files/1234"; // Replace with actual folder name
+        Parser parser;
+        parser.sortRides(folderLocName + "/upcomingRides.txt", folderLocName + "/pastRides.txt");
+    }
     //demo to use bill calculator
     // BillCalculator calcob;
     // int distance = calcob.calculateDistance("Mumbai","Pune");
