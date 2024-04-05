@@ -1,0 +1,2 @@
+| Ride ID    | Date       | Time   | Source City | Destination City | Max Passengers | Current Passengers | Car Model    | Fare(Rs) | Distance (km) |
+|------------|------------|--------|-------------|------------------|----------------|--------------------|--------------|----------|---------------|
