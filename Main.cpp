@@ -508,6 +508,7 @@ class Parser
     }
 };
 
+
 class Menu : public Pages
 {
 public:
@@ -554,8 +555,31 @@ public:
     void bookRide()
     {
         cout << "Booking a ride..." << endl;
-        // Implement logic for booking a ride
+        // Implementing logic for booking a ride
+        string loc, dest, route;
+        int passengers;
+        cout << "Enter your current location: ";
+        cin.ignore();
+        getline(cin, loc);
+        cout << "Enter your destination: ";
+        cin.ignore();
+        getline(cin, dest);
+        cout << "Enter number of passengers: ";
+        cin >> passengers;
+        cout << "Route information: ";
+        cin.ignore();
+        getline(cin, route);
+        cout<<endl;
+        cout << "Ride booked successfully!" << endl;
+        cout<<endl;
+        cout << "Ride Details:" << endl;
+        cout<<endl;
+        cout << "Location: " << loc << endl;
+        cout << "Destination: " << dest << endl;
+        cout << "Number of passengers: " << passengers << endl;
+        cout << "Route: " << route << endl;
     }
+
     void offerRide()
     {
         cout << "Offering a ride..." << endl;
@@ -730,25 +754,6 @@ int main()
     page.thankYouPage();
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class BillCalculator
 {
