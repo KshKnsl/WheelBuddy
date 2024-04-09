@@ -517,7 +517,7 @@ public:
         // this is just a outline you will have to modify it for proper working
         cout << "\t\t\t\t\t||========================================= Menu =========================================||" << endl;
         cout << "\t\t\t\t\t|| 1. Book a Ride\t\t2. Offer a Ride\t\t3. View Upcoming Rides \t\t  ||" << endl;
-        cout << "\t\t\t\t\t|| 4. View Past Rides\t\t5. Manage Profile\t6. Settings        \t\t  ||" << endl;
+        cout << "\t\t\t\t\t|| 4. View Past Rides\t\t5. Manage Profile\t6. Old Bills       \t\t  ||" << endl;
         cout << "\t\t\t\t\t|| 7. Search for Rides\t\t8. Join a Pool\t\t9. Cancel Booking  \t\t  ||" << endl;
         cout << "\t\t\t\t\t|| 10. Rate and Review\t\t11. Feedback\t\t12. Invite Friends   \t\t  ||" << endl;
         cout << "\t\t\t\t\t|| 13. View Rewards/Incentives\t14. CO2 Calculator\t15. Exit \t\t\t  ||" << endl;
@@ -553,7 +553,7 @@ public:
                 break;
             case 6:
                 flag = true;
-                settings();
+                OldBills();
                 break;
             case 7:
                 flag = true;
@@ -666,8 +666,6 @@ private:
         Ride newRide(date, time, sourceCity, destinationCity, maxPassengers, currentPassengers, carModel, fare, distance);
 
         cout << "Ride offered successfully!" << endl;
-        cout << "Ride Details:" << endl;
-        cout << newRide.toString() << endl;
         
     }
     void viewUpcomingRides()
@@ -705,114 +703,34 @@ private:
     {
         cout << "Managing profile..." << endl;
         // Implement logic for managing profile
+
     }
-    void settings()
+    void OldBills()
     {
-    //     cout << "Adjusting settings..." << endl;
-        
-    //     cout << "Adjusting settings..." << endl;
+        BillCalculator b;
+        b.printBill(source,destination,distance,carCapacity);
+        string id;
+        cout<<"Please enter Ride id:"<<endl;
+        cin>>id;
+        string fileName = "./Files/" + user->getUsername() + "/upcomingRides.txt";
+        vector<Ride> rides;
+        ifstream file(fileName);
+        string line;
 
-    //     cout << "Settings Menu:" << endl;
-    //     cout << "1. Change Notification Preferences" << endl;
-    //     cout << "2. Change Language" << endl;
-    //     cout << "3. Change Theme" << endl;
-    //     cout << "Enter your choice: ";
-    //     int choice;
-    //     cin >> choice;
+        getline(file, line); // skip header
+        getline(file, line); // skip ----------
 
-   
-    //     switch (choice)
-    //     {
-    //     case 1:
-    //         changeNotificationPreferences();
-    //         break;
-    //     case 2:
-    //         changeLanguage();
-    //         break;
-    //     case 3:
-    //         changeTheme();
-    //         break;
-    //     default:
-    //         cout << "Invalid choice!" << endl;
-    //     }
-    // }
+        while (getline(file, line))
+        {
+            Ride ride(line);
+            rides.push_back(ride);
+        }
+        file.close();
+        for(int i=0;i<v.size(),i++){
+            
+        }
 
-    // void changeNotificationPreferences()
-    // {
-    //     cout << "Changing notification preferences..." << endl;
-       
-
-        
-    //     bool notificationsEnabled;
-    //     char choice;
-    //     cout << "Do you want to enable notifications? (Y/N): ";
-    //     cin >> choice;
-    //     if (choice == 'Y' || choice == 'y')
-    //     {
-    //         notificationsEnabled = true;
-    //         cout << "Notifications are now enabled." << endl;
-    //     }
-    //     else if (choice == 'N' || choice == 'n')
-    //     {
-    //         notificationsEnabled = false;
-    //         cout << "Notifications are now disabled." << endl;
-    //     }
-    //     else
-    //     {
-    //         cout << "Invalid choice. Keeping current notification settings." << endl;
-    //     }
-    // }
-
-    // void changeLanguage()
-    // {
-    //     cout << "Changing language..." << endl;
-       
-
-        
-    //     string languages[] = {"English", "Spanish", "French"};
-    //     int numLanguages = sizeof(languages) / sizeof(languages[0]);
-    //     cout << "Select language:" << endl;
-    //     for (int i = 0; i < numLanguages; ++i)
-    //     {
-    //         cout << i + 1 << ". " << languages[i] << endl;
-    //     }
-    //     int choice;
-    //     cout << "Enter your choice (1-" << numLanguages << "): ";
-    //     cin >> choice;
-    //     if (choice >= 1 && choice <= numLanguages)
-    //     {
-    //         cout << "Language changed to " << languages[choice - 1] << "." << endl;
-    //     }
-    //     else
-    //     {
-    //         cout << "Invalid choice. Language remains unchanged." << endl;
-    //     }
-    // }
-
-    // void changeTheme()
-    // {
-    //     cout << "Changing theme..." << endl;
-       
-
-        
-    //     string themes[] = {"Light", "Dark"};
-    //     int numThemes = sizeof(themes) / sizeof(themes[0]);
-    //     cout << "Select theme:" << endl;
-    //     for (int i = 0; i < numThemes; ++i)
-    //     {
-    //         cout << i + 1 << ". " << themes[i] << endl;
-    //     }
-    //     int choice;
-    //     cout << "Enter your choice (1-" << numThemes << "): ";
-    //     cin >> choice;
-    //     if (choice >= 1 && choice <= numThemes)
-    //     {
-    //         cout << "Theme changed to " << themes[choice - 1] << "." << endl;
-    //     }
-    //     else
-    //     {
-    //         cout << "Invalid choice. Theme remains unchanged." << endl;
-    //     }
+    
     }
     void searchRides()
     {
