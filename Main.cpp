@@ -138,8 +138,8 @@ public:
         ofstream pastRidesFile(folderPath + "/pastRides.txt");
         ofstream upcomingRidesFile(folderPath + "/upcomingRides.txt");
         ofstream userDetailsFile(folderPath + "/userDetails.txt");
-        pastRidesFile <<     "| Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |" << endl;
-        pastRidesFile <<     "|------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|" << endl;
+        pastRidesFile << "| Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |" << endl;
+        pastRidesFile << "|------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|" << endl;
         upcomingRidesFile << "| Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |" << endl;
         upcomingRidesFile << "|------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|" << endl;
         // Close the files
@@ -350,17 +350,22 @@ public:
         getline(ss, destinationCity, '|');
         ss >> ws; // Skip whitespaces
         getline(ss, temp, '|');
+        temp= trim(temp);
         maxPassengers = stoi(temp);
         ss >> ws; // Skip whitespaces
         getline(ss, temp, '|');
+        temp= trim(temp);
+        cout<<"."<<temp<<"."<<endl;
         currentPassengers = stoi(temp);
         ss >> ws; // Skip whitespaces
         getline(ss, carModel, '|');
         ss >> ws; // Skip whitespaces
         getline(ss, temp, '|');
+        temp= trim(temp);
         fare = stod(temp);
         ss >> ws; // Skip whitespaces
         getline(ss, temp, '|');
+        temp= trim(temp);
         distance = stod(temp);
         // Convert string values to integer or double
     }
@@ -401,6 +406,17 @@ public:
         currentPassengers = passengers;
     }
 
+    string trim(string str) 
+    {
+        auto start = find_if_not(str.begin(), str.end(), [](unsigned char ch) {
+            return isspace(ch);
+        });
+        auto end = find_if_not(str.rbegin(), str.rend(), [](unsigned char ch) {
+            return isspace(ch);
+        }).base();
+        return (start < end ? string(start, end) : "");
+    }
+
     string getRideInfoAsString() const
     {
         std::ostringstream oss;
@@ -421,11 +437,11 @@ public:
         }
         return id;
     }
-    string toString() 
+    string toString()
     {
         stringstream ss;
 
-         ss << "| " << setw(11) << left << truncate(rideID, 11) << "| "
+        ss << "| " << setw(11) << left << truncate(rideID, 11) << "| "
            << setw(12) << left << truncate(date, 12) << "| "
            << setw(7) << left << truncate(time, 7) << "| "
            << setw(13) << left << truncate(sourceCity, 13) << "| "
@@ -439,7 +455,7 @@ public:
         return ss.str();
     }
     // Helper function to truncate strings longer than a specified length
-    string truncate(string str, size_t width) 
+    string truncate(string str, size_t width)
     {
         if (str.length() > width)
             return str.substr(0, width); // Truncate the string
@@ -527,9 +543,9 @@ public:
     void writeRides(string fileName, vector<Ride> &rides)
     {
         ofstream file(fileName);
-        file <<     "| Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |" << endl;
-        file <<     "|------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|" << endl;
-        
+        file << "| Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |" << endl;
+        file << "|------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|" << endl;
+
         for (Ride &ride : rides)
         {
             file << ride.toString() << endl;
@@ -560,8 +576,8 @@ public:
             }
         }
         int dis;
-        cout<<"Enter the distance between source and destination : ";
-        cin>>dis;
+        cout << "Enter the distance between source and destination : ";
+        cin >> dis;
         return dis;
     }
 
@@ -613,7 +629,7 @@ public:
     }
 };
 
-class Menu : public Pages , public BillCalculator
+class Menu : public Pages, public BillCalculator
 {
 public:
     // Display the menu options
@@ -735,7 +751,8 @@ private:
         string adminName = "./Files/admin/upcomingRides.txt";
 
         ofstream file(fileName, ios::app); // Open file in append mode
-        file << s << endl;
+        ofstream adfile(adminName, ios::app); // Open file in append mode
+        file << s << endl;adfile << s << endl;
     }
     void offerRide()
     {
@@ -758,10 +775,9 @@ private:
         cin >> currentPassengers;
         cout << "Enter car model: ";
         cin >> carModel;
-        cout << "Enter fare: ";
-        cin >> fare;
-        cout << "Enter distance: ";
-        cin >> distance;
+        
+        distance = calculateDistance(sourceCity, destinationCity);
+        fare = calculateTotalCost(distance, maxPassengers);
 
         Ride newRide(date, time, sourceCity, destinationCity, maxPassengers, currentPassengers, carModel, fare, distance);
 
@@ -779,9 +795,7 @@ private:
             cout << "Error: Could not open file." << endl;
             return;
         }
-        string l;
-        // Skip the header line
-        getline(file, l);
+
         string line;
         while (getline(file, line))
         {
@@ -791,7 +805,7 @@ private:
     void viewPastRides(User *user)
     {
         cout << "Viewing past rides..." << endl;
-        string fileName = "./Files/" + user->getUsername() + "/upcomingRides.txt";
+        string fileName = "./Files/" + user->getUsername() + "/pastRides.txt";
         vector<Ride> rides;
         ifstream file(fileName);
         if (!file.is_open())
@@ -799,9 +813,7 @@ private:
             cout << "Error: Could not open file." << endl;
             return;
         }
-        string l;
-        // Skip the header line
-        getline(file, l);
+        
         string line;
         while (getline(file, line))
         {
@@ -812,42 +824,67 @@ private:
     {
         cout << "Managing profile..." << endl;
         string fileName = "./Files/" + user->getUsername() + "userDetails.txt";
-        ofstream file(fileName, ios::app);
-        string str;
-        while (true)
-        {
-            cout << "What do you want to change? (type 'done' to finish): ";
-            cin >> str;
+        ofstream file(fileName);
+        string username, fullName, age, gender, email, address, phone, aadharNo, memberSince, ridesTaken, amountSpent;
 
-            if (str == "done")
-            {
-                break; // Exit the loop if the user types 'done'
-            }
-            else
-            {
-                string newValue;
-                cout << "Enter the new value for " << str << ": ";
-                cin >> newValue;
+        username = fileName;
+        cout << "Enter Full Name: ";
+        getline(cin, fullName);
+        getline(cin, fullName);
+        cout << "Enter Age: ";
+        getline(cin, age);
+        cout << "Enter Gender: ";
+        getline(cin, gender);
+        cout << "Enter Email: ";
+        getline(cin, email);
+        cout << "Enter Address: ";
+        getline(cin, address);
+        cout << "Enter Phone: ";
+        getline(cin, phone);
+        cout << "Enter Aadhar Card No: ";
+        getline(cin, aadharNo);
+        cout << "Enter Member Since (YYYY-MM-DD): ";
+        getline(cin, memberSince);
 
-                file << str << ": " << newValue << endl;
-                cout << "Profile updated." << endl;
-
-                file << str << endl;
-                cout << "Profile updated." << endl;
-            }
+        // Write user details to file
+        file << "Username: " << username << endl;
+        file << "Full Name: " << fullName << endl;
+        file << "Age: " << age << endl;
+        file << "Gender: " << gender << endl;
+        file << "Email: " << email << endl;
+        file << "Address: " << address << endl;
+        file << "Phone: " << phone << endl;
+        file << "Aadhar Card No: " << aadharNo << endl;
+        file << "Member Since: " << memberSince << endl;
+        
+        string fileName1 = "./Files/" + user->getUsername() + "/pastRides.txt";
+        string fileName2 = "./Files/" + user->getUsername() + "/upcomingRides.txt";
+        ifstream file1(fileName1);
+        ifstream file2(fileName2);
+        int totalLines = 0;
+        string line;
+        while (getline(file1, line)) {
+            totalLines++;
         }
+        while (getline(file2, line)) {
+            totalLines++;
+        }
+    
+        file1.close();
+        file2.close();
+        file << "Total Rides Taken: " << totalLines-4 << endl;
+        file << "Total Amount Spent: Rs. " << 0 << endl;
 
+        // Close the file
         file.close();
     }
     void OldBills(User *user)
     {
-        BillCalculator b;
-        // b.printBill(source, destination, distance, carCapacity);
         string id;
         cout << "Please enter Ride id:" << endl;
         cin >> id;
 
-        string fileName = "./Files/" + user->getUsername() + "/upcomingRides.txt";
+        string fileName = "./Files/" + user->getUsername() + "/pastRides.txt";
         vector<Ride> rides;
 
         ifstream file(fileName);
@@ -876,7 +913,8 @@ private:
                 found = true;
                 // Assuming you have a function to retrieve bill information from the Ride object
                 cout << "Bill details for ride with ID " << id << ":" << endl;
-                cout << ride.toString() << endl;
+                BillCalculator b;
+                b.printBill(ride.getSourceCity(), ride.getDestinationCity(), ride.getDistance(), ride.getMaxPassengers());
                 break; // No need to continue searching once found
             }
         }
@@ -953,15 +991,9 @@ private:
 
         // file.close();
     }
-<<<<<<< HEAD
     void joinPool()
     {
         cout << "Joining a pool..." << endl;
-=======
-       void joinPool()
-    {
-    cout << "Joining a pool..." << endl;
->>>>>>> 1d65223f1fefc71f7aa1b186bbe5b5fc03961c47
 
         // Ask user how many people want to do carpool
         int numPeople;
@@ -1059,10 +1091,6 @@ private:
             cout << "No available rides match the given source and destination, or all available seats are already booked." << endl;
         }
     }
-<<<<<<< HEAD
-=======
-   }
->>>>>>> 1d65223f1fefc71f7aa1b186bbe5b5fc03961c47
     void cancelBooking()
     {
         cout << "Canceling booking..." << endl;
@@ -1071,37 +1099,40 @@ private:
 
     void rateAndReview()
     {
-    cout << "\nRATE US NOW!!" << endl;
-    cout << "1. *\n";
-    cout << "2. **\n";
-    cout << "3. ***\n";
-    cout << "4. ****\n";
-    cout << "5. *****\n";
-    int rate;
-    cin >> rate;
+        cout << "\nRATE US NOW!!" << endl;
+        cout << "1. *\n";
+        cout << "2. **\n";
+        cout << "3. ***\n";
+        cout << "4. ****\n";
+        cout << "5. *****\n";
+        int rate;
+        cin >> rate;
 
-    // Clear input buffer to avoid potential issues
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        // Clear input buffer to avoid potential issues
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 
-  void feedback()
-   {
-    cout << "Providing feedback..." << endl;
-    
-    string feedback;
-    cout << "Please provide your feedback (up to 999 characters):\n";
-    getline(cin >> ws, feedback); 
+    void feedback()
+    {
+        cout << "Providing feedback..." << endl;
 
-    // Saving feedback to a file
-    ofstream feedbackFile("CodeRelatedFiles/feedback.txt", ios::app);
-    if (feedbackFile.is_open()) {
-        feedbackFile << feedback << endl;
-        feedbackFile.close();
-        cout << "Thank you for your feedback! It has been saved in feedback.txt." << endl;
-    } else {
-        cout << "Error saving feedback. Please try again later." << endl;
+        string feedback;
+        cout << "Please provide your feedback (up to 999 characters):\n";
+        getline(cin >> ws, feedback);
+
+        // Saving feedback to a file
+        ofstream feedbackFile("CodeRelatedFiles/feedback.txt", ios::app);
+        if (feedbackFile.is_open())
+        {
+            feedbackFile << feedback << endl;
+            feedbackFile.close();
+            cout << "Thank you for your feedback! It has been saved in feedback.txt." << endl;
+        }
+        else
+        {
+            cout << "Error saving feedback. Please try again later." << endl;
+        }
     }
-   }
 
     void inviteFriends()
     {
@@ -1119,10 +1150,10 @@ private:
         // Implement logic for calculating CO2 emission
     }
     void exitProgram()
-   {
-    cout << "Exiting program..." << endl;
-    // Implement logic for calculating CO2 emission
-   }
+    {
+        cout << "Exiting program..." << endl;
+        // Implement logic for calculating CO2 emission
+    }
 };
 
 int main()
@@ -1225,4 +1256,3 @@ int main()
     page.thankYouPage();
     return 0;
 }
-
