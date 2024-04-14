@@ -1,14 +1,14 @@
-<<<<<<< HEAD
-| Ride ID    | Date       | Time   | Source City | Destination City | Max Passengers | Current Passengers | Car Model    | Fare(Rs) | Distance (km) |
-|------------|------------|--------|-------------|------------------|----------------|--------------------|--------------|----------|---------------|
-| V5W6X      | 2024-04-10 | 14:00  | Mumbai      | Ahmedabad        | 4              | 3                  | Tata Nexon   | 530      | 530           |
-| B1C2D      | 2024-04-25 | 16:20  | Mumbai      | Bhopal           | 3              | 2                  | Renault Kwid | 770      | 770           |
-| S3T4U      | 2024-06-05 | 08:45  | Mumbai      | Jaipur           | 5              | 1                  | Mahindra XUV | 1200     | 1200          |
-| Y7Z8A      | 2024-07-20 | 11:15  | Mumbai      | Lucknow          | 6              | 4                  | Volkswagen   | 1500     | 1500          |
-=======
 | Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |
 |------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|
+|            |             |        |              |                   | 6              | 4                   |               | 1500     | 1500          |
+|            |             |        |              |                   | 6              | 4                   |               | 1500     | 1500          |
+| -----------| ------------| -------| -------------| ------------------| 4199136        | 4199136             | --------------| 8.84116e-307| 1.42511e+231  |
+| -----------| ------------| -------| -------------| ------------------| 6              | 4                   | --------------| 1500     | 1500          |
+| B1C2D      | 2024-04-25  | 16:20  | Mumbai       | Bhopal            | 3              | 2                   | Renault Kwid  | 770      | 770           |
 | B1C2D      | 2024-04-25  | 16:20  | Mumbai       | Bhopal            | 3              | 2                   | Renault Kwid  | 770      | 770           |
 | S3T4U      | 2024-06-05  | 08:45  | Mumbai       | Jaipur            | 5              | 1                   | Mahindra XUV  | 1200     | 1200          |
+| S3T4U      | 2024-06-05  | 08:45  | Mumbai       | Jaipur            | 5              | 1                   | Mahindra XUV  | 1200     | 1200          |
 | Y7Z8A      | 2024-07-20  | 11:15  | Mumbai       | Lucknow           | 6              | 4                   | Volkswagen    | 1500     | 1500          |
->>>>>>> f5895401f4a106aa109c4118a1aa87e8bb03b5e8
+| Y7Z8A      | 2024-07-20  | 11:15  | Mumbai       | Lucknow           | 6              | 4                   | Volkswagen    | 1500     | 1500          |
+| fCjiq      | 2024-6-15   | 12:34  | Delhi        | Pune              | 4              | 5                   | toyata        | 23020    | 1550          |
+| Ride ID    | Date        | Time   | Source City  | Destination City  | 6              | 4                   | Car Model     | 1500     | 1500          |

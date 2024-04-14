@@ -351,22 +351,26 @@ public:
         ss >> ws; // Skip whitespaces
         getline(ss, temp, '|');
         temp= trim(temp);
+        try{
         maxPassengers = stoi(temp);
+        }
+        catch (const invalid_argument& e){}
         ss >> ws; // Skip whitespaces
         getline(ss, temp, '|');
-        temp= trim(temp);
-        cout<<"."<<temp<<"."<<endl;
-        currentPassengers = stoi(temp);
+        try{currentPassengers = stoi(temp);}
+        catch (const invalid_argument& e){}
         ss >> ws; // Skip whitespaces
         getline(ss, carModel, '|');
         ss >> ws; // Skip whitespaces
         getline(ss, temp, '|');
         temp= trim(temp);
-        fare = stod(temp);
+        try{fare = stod(temp);}
+        catch (const invalid_argument& e){}
         ss >> ws; // Skip whitespaces
         getline(ss, temp, '|');
         temp= trim(temp);
-        distance = stod(temp);
+        try{distance = stod(temp);}
+        catch (const invalid_argument& e){}
         // Convert string values to integer or double
     }
 
@@ -385,17 +389,17 @@ public:
         this->distance = distance;
     }
 
-    string getRideID() { return rideID; }
-    string getDate() { return date; }
-    string getTime() { return time; }
-    string getSourceCity() { return sourceCity; }
-    string getDestinationCity() { return destinationCity; }
+   
+    string getRideID() { return trim(rideID); }
+    string getDate() { return trim(date); }
+    string getTime() { return trim(time); }
+    string getSourceCity() { return trim(sourceCity); }
+    string getDestinationCity() { return trim(destinationCity); }
     int getMaxPassengers() { return maxPassengers; }
     int getCurrentPassengers() { return currentPassengers; }
-    string getCarModel() { return carModel; }
+    string getCarModel() { return trim(carModel); }
     double getFare() { return fare; }
     double getDistance() { return distance; }
-
     void setRideInfoFromStream(istringstream &iss)
     {
         iss >> rideID >> date >> time >> sourceCity >> destinationCity >> maxPassengers >> currentPassengers >> carModel >> fare >> distance;
@@ -406,15 +410,17 @@ public:
         currentPassengers = passengers;
     }
 
-    string trim(string str) 
-    {
-        auto start = find_if_not(str.begin(), str.end(), [](unsigned char ch) {
-            return isspace(ch);
-        });
-        auto end = find_if_not(str.rbegin(), str.rend(), [](unsigned char ch) {
-            return isspace(ch);
-        }).base();
-        return (start < end ? string(start, end) : "");
+    string trim(const string& str) {
+        size_t firstNonSpace = str.find_first_not_of(" \t\n\r"); // Find index of first non-whitespace character
+        size_t lastNonSpace = str.find_last_not_of(" \t\n\r");   // Find index of last non-whitespace character
+
+        if (firstNonSpace == string::npos || lastNonSpace == string::npos) {
+            // Handle the case when the string is empty or contains only whitespace
+            return "";
+        } else {
+            // Return the substring between the first and last non-whitespace characters
+            return str.substr(firstNonSpace, lastNonSpace - firstNonSpace + 1);
+        }
     }
 
     string getRideInfoAsString() const
@@ -908,7 +914,8 @@ private:
         bool found = false;
         for (Ride &ride : rides)
         {
-            if (ride.getRideID() == id)
+            cout<<"."<<ride.getRideID().substr(0,5)<<"."<<endl;
+            if (ride.getRideID().substr(0,5) == id)
             {
                 found = true;
                 // Assuming you have a function to retrieve bill information from the Ride object
@@ -926,70 +933,49 @@ private:
     }
     void searchRides()
     {
-        // cout << "Searching for rides..." << endl;
-        // string sourceCity, destinationCity, date, time;
-        // cout << "Enter source city: ";
-        // cin >> sourceCity;
-        // cout << "Enter destination city: ";
-        // cin >> destinationCity;
-        // cout << "Enter date (YYYY-MM-DD): ";
-        // cin >> date;
-        // cout << "Enter time (HH:MM): ";
-        // cin >> time;
+        cout << "Searching for rides..." << endl;
+        string sourceCity, destinationCity, date, time;
+        cout << "Enter source city: ";
+        cin >> sourceCity;
+        cout << "Enter destination city: ";
+        cin >> destinationCity;
+        cout << "Enter date (YYYY-MM-DD): ";
+        cin >> date;
+        cout << "Enter time (HH:MM): ";
+        cin >> time;
 
-        // string adminName = "./Files/admin/upcomingRides.txt";
+        string adminName = "./Files/admin/upcomingRides.txt";
+        string line;
 
-        // ifstream file(adminName);
-        // if (!file.is_open())
-        // {
-        //     cout << "Error: Could not open file." << endl;
-        //     return;
-        // }
+        ifstream file(adminName);
+        if (!file.is_open())
+        {
+            cout << "Error: Could not open file." << endl;
+            return;
+        }
+        vector<Ride> rides;
+        bool found = false;
+        getline(file, line); // skip header
+        getline(file, line); // skip ----------
 
-        // bool found = false;
-        // while (getline(file, line))
-        // {
-        //     stringstream ss(line);
-        //     Ride ride;
-        //     getline(ss, ride.rideID, '|');
-        //     getline(ss, ride.date, '|');
-        //     getline(ss, ride.time, '|');
-        //     getline(ss, ride.sourceCity, '|');
-        //     getline(ss, ride.destinationCity, '|');
-        //     ss >> ride.maxPassengers;
-        //     ss.ignore(); // Ignore the '|' separator
-        //     ss >> ride.currentPassengers;
-        //     ss.ignore(); // Ignore the '|' separator
-        //     getline(ss, ride.carModel, '|');
-        //     ss >> ride.fare;
-        //     ss.ignore(); // Ignore the '|' separator
-        //     ss >> ride.distance;
+        while (getline(file, line))
+        {
+            Ride ride(line);
+            rides.push_back(ride);
+        
+            if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity &&
+                ride.getDate() == date && ride.getTime() == time)
+            {
+                ride.toString();
+            }
+        }
 
-        //     if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity &&
-        //         ride.getDate() == date && ride.getTime() == time)
-        //     {
-        //         cout << "Match found:" << endl;
-        //         cout << "Ride ID: " << ride.getRideID() << endl;
-        //         cout << "Date: " << ride.getDate() << endl;
-        //         cout << "Time: " << ride.getTime() << endl;
-        //         cout << "Source City: " << ride.getSourceCity() << endl;
-        //         cout << "Destination City: " << ride.getDestinationCity() << endl;
-        //         cout << "Max Passengers: " << ride.getMaxPassengers() << endl;
-        //         cout << "Current Passengers: " << ride.getCurrentPassengers() << endl;
-        //         cout << "Car Model: " << ride.getCarModel() << endl;
-        //         cout << "Fare: " << ride.getFare() << " Rs" << endl;
-        //         cout << "Distance: " << ride.getDistance() << " km" << endl;
-        //         found = true;
-        //         break; // Stop searching after finding the first match
-        //     }
-        // }
+        if (!found)
+        {
+            cout << "No matching ride found." << endl;
+        }
 
-        // if (!found)
-        // {
-        //     cout << "No matching ride found." << endl;
-        // }
-
-        // file.close();
+        file.close();
     }
     void joinPool()
     {
@@ -1242,7 +1228,8 @@ int main()
 
         Menu menu;
         // Display the menu
-        menu.displayMenu(user);
+        while(true){
+        menu.displayMenu(user);}
     }
 
     // demo to use bill calculator

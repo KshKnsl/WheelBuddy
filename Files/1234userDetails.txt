@@ -1,0 +1,11 @@
+Username: ./Files/1234userDetails.txt
+Full Name: ShriyashMishra
+Age: 19
+Gender: Female
+Email: kjbdjfg@gmail.com
+Address: ghhgh
+Phone: hgghhggh
+Aadhar Card No: hgghhggh
+Member Since: ererer
+Total Rides Taken: 12
+Total Amount Spent: Rs. 0
