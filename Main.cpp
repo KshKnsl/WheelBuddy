@@ -953,9 +953,15 @@ private:
 
         // file.close();
     }
+<<<<<<< HEAD
     void joinPool()
     {
         cout << "Joining a pool..." << endl;
+=======
+       void joinPool()
+    {
+    cout << "Joining a pool..." << endl;
+>>>>>>> 1d65223f1fefc71f7aa1b186bbe5b5fc03961c47
 
         // Ask user how many people want to do carpool
         int numPeople;
@@ -1053,21 +1059,50 @@ private:
             cout << "No available rides match the given source and destination, or all available seats are already booked." << endl;
         }
     }
+<<<<<<< HEAD
+=======
+   }
+>>>>>>> 1d65223f1fefc71f7aa1b186bbe5b5fc03961c47
     void cancelBooking()
     {
         cout << "Canceling booking..." << endl;
         // Implement logic for canceling booking
     }
+
     void rateAndReview()
     {
-        cout << "Rating and reviewing..." << endl;
-        // Implement logic for rating and reviewing
+    cout << "\nRATE US NOW!!" << endl;
+    cout << "1. *\n";
+    cout << "2. **\n";
+    cout << "3. ***\n";
+    cout << "4. ****\n";
+    cout << "5. *****\n";
+    int rate;
+    cin >> rate;
+
+    // Clear input buffer to avoid potential issues
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
-    void feedback()
-    {
-        cout << "Providing feedback..." << endl;
-        // Implement logic for providing feedback
+
+  void feedback()
+   {
+    cout << "Providing feedback..." << endl;
+    
+    string feedback;
+    cout << "Please provide your feedback (up to 999 characters):\n";
+    getline(cin >> ws, feedback); 
+
+    // Saving feedback to a file
+    ofstream feedbackFile("CodeRelatedFiles/feedback.txt", ios::app);
+    if (feedbackFile.is_open()) {
+        feedbackFile << feedback << endl;
+        feedbackFile.close();
+        cout << "Thank you for your feedback! It has been saved in feedback.txt." << endl;
+    } else {
+        cout << "Error saving feedback. Please try again later." << endl;
     }
+   }
+
     void inviteFriends()
     {
         cout << "Inviting friends..." << endl;
@@ -1084,10 +1119,10 @@ private:
         // Implement logic for calculating CO2 emission
     }
     void exitProgram()
-    {
-        cout << "Exiting program..." << endl;
-        // Implement logic for exiting program
-    }
+   {
+    cout << "Exiting program..." << endl;
+    // Implement logic for calculating CO2 emission
+   }
 };
 
 int main()

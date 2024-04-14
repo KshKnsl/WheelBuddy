@@ -6,3 +6,4 @@
 | J7K8L      | 2024-01-10  | 19:00  | Mumbai       | Chennai           | 5              | 4                   | Hyundai i20   | 1340     | 1340          |
 | M9N0O      | 2024-02-02  | 16:45  | Mumbai       | Hyderabad         | 3              | 3                   | Ford Figo     | 620      | 620           |
 | P1Q2R      | 2024-03-30  | 10:30  | Mumbai       | Pune              | 4              | 0                   | Toyota Innova | 150      | 150           |
+| V5W6X      | 2024-04-10  | 14:00  | Mumbai       | Ahmedabad         | 4              | 3                   | Tata Nexon    | 530      | 530           |
