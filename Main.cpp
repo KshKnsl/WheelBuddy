@@ -1077,10 +1077,78 @@ private:
             cout << "No available rides match the given source and destination, or all available seats are already booked." << endl;
         }
     }
-    void cancelBooking()
-    {
-        cout << "Canceling booking..." << endl;
-        // Implement logic for canceling booking
+     
+    void  cancelBooking(){
+        int choice;
+    cout << "How would you like to cancel your booking?" << endl;
+    cout << "1. By Date" << endl;
+    cout << "2. By Time" << endl;
+    cout << "Enter your choice: ";
+    cin >> choice;
+
+    string cancelDate, cancelTime;
+    switch (choice) {
+        case 1:
+            cout << "Enter the Date (YYYY-MM-DD) of the booking to cancel: ";
+            cin >> cancelDate;
+            break;
+        case 2:
+            cout << "Enter the Time (HH:MM) of the booking to cancel: ";
+            cin >> cancelTime;
+            break;
+        default:
+            cout << "Invalid choice. Please enter 1 or 2." << endl;
+            return;
+    }
+
+    ifstream inFile("Files/admin/upcomingRides.txt");
+
+    if (!inFile) {
+        cerr << "Error: Unable to open file." << endl;
+        return;
+    }
+
+
+    string line;
+    vector<string> modifiedLines;
+    bool found = false;
+    while (getline(inFile, line)) {
+        // Check if the line contains the entered Date or Time
+        if ((choice == 1 && line.find(cancelDate) != string::npos) ||
+            (choice == 2 && line.find(cancelTime) != string::npos)) {
+            found = true;
+            continue; 
+        }
+        // Add the line to the modifiedLines vector
+        modifiedLines.push_back(line);
+    }
+
+    inFile.close();
+
+    if (!found) {
+        if (choice == 1) {
+            cout << "Booking with Date " << cancelDate << " not found. No booking canceled." << endl;
+        } else {
+            cout << "Booking with Time " << cancelTime << " not found. No booking canceled." << endl;
+        }
+        return;
+    }
+
+    // Rewriting the modified contents back to the file
+    ofstream outFile("Files/admin/upcomingRides.txt", ofstream::out | ofstream::trunc);
+    if (!outFile) {
+        cerr << "Error: Unable to open file for writing." << endl;
+        return;
+    }
+
+    for (const string& l : modifiedLines) {
+        outFile << l << endl;
+    }
+
+    cout << "Booking canceled successfully." << endl;
+
+ 
+    outFile.close();
     }
 
     void rateAndReview()
