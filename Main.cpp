@@ -138,10 +138,10 @@ public:
         ofstream pastRidesFile(folderPath + "/pastRides.txt");
         ofstream upcomingRidesFile(folderPath + "/upcomingRides.txt");
         ofstream userDetailsFile(folderPath + "/userDetails.txt");
-        pastRidesFile << "| Ride ID    | Date       | Time   | Source City | Destination City | Max Passengers | Current Passengers | Car Model    | Fare(Rs) | Distance (km) |" << endl;
-        pastRidesFile << "|------------|------------|--------|-------------|------------------|----------------|--------------------|--------------|----------|---------------|" << endl;
-        upcomingRidesFile << "| Ride ID    | Date       | Time   | Source City | Destination City | Max Passengers | Current Passengers | Car Model    | Fare(Rs) | Distance (km) |" << endl;
-        upcomingRidesFile << "|------------|------------|--------|-------------|------------------|----------------|--------------------|--------------|----------|---------------|" << endl;
+        pastRidesFile <<     "| Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |" << endl;
+        pastRidesFile <<     "|------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|" << endl;
+        upcomingRidesFile << "| Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |" << endl;
+        upcomingRidesFile << "|------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|" << endl;
         // Close the files
         pastRidesFile.close();
         upcomingRidesFile.close();
@@ -289,25 +289,25 @@ public:
              << endl;
         file.close();
         cout << "Past Rides Details:" << endl;
-        cout << "\t-----------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
+        cout << "\t----------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
         filename = "Files/" + username + "/pastRides.txt";
         ifstream file2(filename);
         while (getline(file2, line))
         {
             cout << "\t" << line << endl;
         }
-        cout << "\t-----------------------------------------------------------------------------------------------------------------------------------------------------\n"
+        cout << "\t----------------------------------------------------------------------------------------------------------------------------------------------------------\n"
              << endl;
         file2.close();
         cout << "Upcoming Rides Details:" << endl;
-        cout << "\t-----------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
+        cout << "\t----------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
         filename = "Files/" + username + "/upcomingRides.txt";
         ifstream file3(filename);
         while (getline(file3, line))
         {
             cout << "\t" << line << endl;
         }
-        cout << "\t-----------------------------------------------------------------------------------------------------------------------------------------------------\n"
+        cout << "\t----------------------------------------------------------------------------------------------------------------------------------------------------------\n"
              << endl;
         file3.close();
     }
@@ -421,16 +421,30 @@ public:
         }
         return id;
     }
-
-    string toString()
+    string toString() 
     {
         stringstream ss;
 
-        ss << "| " << setw(10) << left << rideID << "| " << setw(10) << left << date << "| " << setw(6) << left << time << "| "
-           << setw(11) << left << sourceCity << "| " << setw(16) << left << destinationCity << "| " << setw(14) << left << maxPassengers
-           << " | " << setw(18) << left << currentPassengers << " | " << setw(11) << left << carModel << "| " << setw(7) << left << fare
-           << "  | " << setw(13) << left << distance << " |";
+         ss << "| " << setw(11) << left << truncate(rideID, 11) << "| "
+           << setw(12) << left << truncate(date, 12) << "| "
+           << setw(7) << left << truncate(time, 7) << "| "
+           << setw(13) << left << truncate(sourceCity, 13) << "| "
+           << setw(18) << left << truncate(destinationCity, 18) << "| "
+           << setw(15) << left << maxPassengers << "| "
+           << setw(20) << left << currentPassengers << "| "
+           << setw(14) << left << truncate(carModel, 14) << "| "
+           << setw(9) << left << fare << "| "
+           << setw(14) << left << distance << "|";
+
         return ss.str();
+    }
+    // Helper function to truncate strings longer than a specified length
+    string truncate(string str, size_t width) 
+    {
+        if (str.length() > width)
+            return str.substr(0, width); // Truncate the string
+        else
+            return str; // Return the original string if its length is within the width
     }
 };
 
@@ -513,9 +527,9 @@ public:
     void writeRides(string fileName, vector<Ride> &rides)
     {
         ofstream file(fileName);
-        file << "| Ride ID    | Date       | Time   | Source City | Destination City | Max Passengers | Current Passengers | Car Model    | Fare(Rs) | Distance (km) |" << endl;
-        file << "|------------|------------|--------|-------------|------------------|----------------|--------------------|--------------|----------|---------------|" << endl;
-
+        file <<     "| Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |" << endl;
+        file <<     "|------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|" << endl;
+        
         for (Ride &ride : rides)
         {
             file << ride.toString() << endl;
@@ -545,7 +559,10 @@ public:
                 return stoi(distanceLookup[i][2]);
             }
         }
-        return 0;
+        int dis;
+        cout<<"Enter the distance between source and destination : ";
+        cin>>dis;
+        return dis;
     }
 
     // Function to calculate the total cost based on distance, car capacity, and fixed costs
@@ -596,7 +613,7 @@ public:
     }
 };
 
-class Menu : public Pages
+class Menu : public Pages , public BillCalculator
 {
 public:
     // Display the menu options
@@ -690,12 +707,11 @@ private:
     void bookRide(User *user)
     {
         cout << "Booking a ride..." << endl;
+        // Implementing logic for booking a ride
         string rideID, date, time, sourceCity, destinationCity, carModel;
         int maxPassengers, currentPassengers;
         double fare, distance;
 
-        cout << "Enter Ride ID: ";
-        cin >> rideID;
         cout << "Enter Date (YYYY-MM-DD): ";
         cin >> date;
         cout << "Enter Time (HH:MM): ";
@@ -710,10 +726,8 @@ private:
         cin >> currentPassengers;
         cout << "Enter Car Model: ";
         cin >> carModel;
-        cout << "Enter Fare (Rs): ";
-        cin >> fare;
-        cout << "Enter Distance (km): ";
-        cin >> distance;
+        distance = calculateDistance(sourceCity, destinationCity);
+        fare = calculateTotalCost(distance, maxPassengers);
 
         Ride r(date, time, sourceCity, destinationCity, maxPassengers, currentPassengers, carModel, fare, distance);
         string s = r.toString();
@@ -1158,7 +1172,7 @@ int main()
         // Now display the dashboard
         Dashboard dash;
         dash.display(user->getUsername());
-        Sleep(5000);
+        Sleep(3000);
 
         Menu menu;
         // Display the menu
@@ -1171,8 +1185,9 @@ int main()
     //  calcob.printBill("Mumbai","Pune",distance,5);
 
     // Demo to use the ride class functions
-    //  Ride ride("| A1B2C      | 2023-12-20 | 08:00  | Mumbai      | Delhi            | 4              | 3                  | Toyota Camry | 1200     | 1200          |");
-    //  cout << "Ride Details: " << ride.toString() << endl;
+    // Ride ride("| A1B2C      | 2023-12-20 | 08:00  | Mumbai      | Delhi            | 4              | 3                  | Toyota Camry | 1200     | 1200          |");
+    // cout << "Ride Details: " << ride.toString() << endl;
     page.thankYouPage();
     return 0;
 }
+
