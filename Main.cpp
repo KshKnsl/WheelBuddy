@@ -1203,10 +1203,11 @@ private:
         cout << "Calculating CO2 emission..." << endl;
         // Implement logic for calculating CO2 emission
     }
+    
     void exitProgram()
     {
         cout << "Exiting program..." << endl;
-        // Implement logic for calculating CO2 emission
+        thankYouPage();
     }
 };
 
