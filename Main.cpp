@@ -1198,13 +1198,37 @@ private:
         cout << "Viewing rewards..." << endl;
         // Implement logic for viewing rewards
     }
+
     void calculateCO2Emission()
+{
+    cout << "Calculating CO2 emission..." << endl;
+    string source, destination;
+    cout << "Enter source city: ";
+    cin >> source;
+   cout << "Enter destination city: ";
+    cin >> destination;
+
+    int distance = calculateDistance(source, destination);
+    if (distance == -1)
     {
-        cout << "Calculating CO2 emission..." << endl;
-        // Implement logic for calculating CO2 emission
+        std::cout << "Distance between the specified cities not found." << std::endl;
+        return;
     }
+
+    double emission = distance * 16.0; // Emission in grams
+    std::cout << "Total CO2 emission for the trip: " << emission << " grams" << std::endl;
+
+    if (emission > 500)
+    {
+       cout << "Your emissions are high. Consider the following measures to reduce them:" << endl;
+        cout << "- Use public transportation where possible." << endl;
+        cout << "- Carpool with others to reduce the number of vehicles on the road." << endl;
+        cout << "- Choose fuel-efficient vehicles or consider electric options." <<endl;
+        cout << "- Plan your trips efficiently to minimize distance traveled." << endl;
+    }
+}
     
-    void exitProgram()
+ void exitProgram()
     {
         cout << "Exiting program..." << endl;
         thankYouPage();
