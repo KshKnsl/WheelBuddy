@@ -1188,12 +1188,52 @@ private:
         }
     }
 
-    void inviteFriends()
-    {
-        cout << "Inviting friends..." << endl;
-        // Implement logic for inviting friends
+    void inviteFriends() {
+    ifstream file("Files/admin/upcomingRides.txt");
+
+    if (!file) {
+        cerr << "Error opening file" << endl;
+        return;
     }
-    void viewRewards()
+
+    string line;
+    string sourceCity, destinationCity;
+    bool rideFound = false;
+
+    cout << "Enter source city: ";
+    cin >> sourceCity;
+    cout << "Enter destination city: ";
+    cin >> destinationCity;
+
+    while (getline(file, line)) {
+        istringstream iss(line);
+        Ride ride;
+
+        // Parse ride information using Ride member functions
+        ride.setRideInfoFromStream(iss);
+
+        // Check if the source and destination cities match
+        if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers()) {
+            rideFound = true;
+
+            cout << "Ride ID: " << ride.getRideID() << endl;
+            cout << "Date: " << ride.getDate() << endl;
+            cout << "Time: " << ride.getTime() << endl;
+            cout << "Car Model: " << ride.getCarModel() << endl;
+            cout << "Fare: " << fixed << setprecision(2) << ride.getFare()<< " Rs" << endl; 
+            cout << "Distance: " << ride.getDistance() << " km" << endl;
+            cout<<"here is link to share the ride"<<endl;
+            system("xdg-open https://randomqr.com/");
+        }
+    }
+
+    if (!rideFound) {
+        cout << "No rides available to share specified source and destination cities." << endl;
+    }
+  file.close();
+}
+
+  void viewRewards()
     {
         cout << "Viewing rewards..." << endl;
         // Implement logic for viewing rewards
@@ -1211,12 +1251,12 @@ private:
     int distance = calculateDistance(source, destination);
     if (distance == -1)
     {
-        std::cout << "Distance between the specified cities not found." << std::endl;
+        cout << "Distance between the specified cities not found." <<endl;
         return;
     }
 
     double emission = distance * 16.0; // Emission in grams
-    std::cout << "Total CO2 emission for the trip: " << emission << " grams" << std::endl;
+    cout << "Total CO2 emission for the trip: " << emission << " grams" << endl;
 
     if (emission > 500)
     {
