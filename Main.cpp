@@ -202,11 +202,11 @@ public:
         }
 
         in.close();
-        Sleep(1000);
+        Sleep(500);
         cout << "\nStarting the program please wait....." << endl;
-        Sleep(1000);
+        Sleep(500);
         cout << "\nloading up files....." << endl;
-        Sleep(1000);
+        Sleep(500);
         system("cls");
     }
 
@@ -1078,7 +1078,8 @@ private:
         }
     }
      
-    void  cancelBooking(){
+    void  cancelBooking()
+    {
         int choice;
     cout << "How would you like to cancel your booking?" << endl;
     cout << "1. By Date" << endl;
@@ -1188,87 +1189,85 @@ private:
         }
     }
 
-    void inviteFriends() {
-    ifstream file("Files/admin/upcomingRides.txt");
+    void inviteFriends() 
+    {
+        ifstream file("Files/admin/upcomingRides.txt");
 
-    if (!file) {
-        cerr << "Error opening file" << endl;
-        return;
-    }
+        string line;
+        string sourceCity, destinationCity;
+        bool rideFound = false;
 
-    string line;
-    string sourceCity, destinationCity;
-    bool rideFound = false;
+        cout << "Enter source city: ";
+        cin >> sourceCity;
+        cout << "Enter destination city: ";
+        cin >> destinationCity;
 
-    cout << "Enter source city: ";
-    cin >> sourceCity;
-    cout << "Enter destination city: ";
-    cin >> destinationCity;
-
-    while (getline(file, line)) {
-        istringstream iss(line);
-        Ride ride;
-
-        // Parse ride information using Ride member functions
-        ride.setRideInfoFromStream(iss);
-
-        // Check if the source and destination cities match
-        if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers()) {
-            rideFound = true;
-
-            cout << "Ride ID: " << ride.getRideID() << endl;
-            cout << "Date: " << ride.getDate() << endl;
-            cout << "Time: " << ride.getTime() << endl;
-            cout << "Car Model: " << ride.getCarModel() << endl;
-            cout << "Fare: " << fixed << setprecision(2) << ride.getFare()<< " Rs" << endl; 
-            cout << "Distance: " << ride.getDistance() << " km" << endl;
-            cout<<"here is link to share the ride"<<endl;
-            system("xdg-open https://randomqr.com/");
+        getline(file, line);
+        getline(file, line);    
+        while (getline(file, line)) 
+        {
+            Ride ride(line);
+            // Parse ride information using Ride member functions
+            // Check if the source and destination cities match
+            if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers())
+            {
+                rideFound = true;
+                cout << "Ride ID: " << ride.getRideID() << endl;
+                cout << "Date: " << ride.getDate() << endl;
+                cout << "Time: " << ride.getTime() << endl;
+                cout << "Car Model: " << ride.getCarModel() << endl;
+                cout << "Fare: " << fixed << setprecision(2) << ride.getFare()<< " Rs" << endl; 
+                cout << "Distance: " << ride.getDistance() << " km" << endl;
+                cout<<"here is link to share the ride"<<endl;
+                system("xdg-open https://randomqr.com/");
+            }
         }
+        if (!rideFound)
+            cout << "No rides available to share specified source and destination cities." << endl;
+        file.close();
     }
 
-    if (!rideFound) {
-        cout << "No rides available to share specified source and destination cities." << endl;
-    }
-  file.close();
-}
-
-  void viewRewards()
+    void viewRewards()
     {
         cout << "Viewing rewards..." << endl;
         // Implement logic for viewing rewards
     }
 
     void calculateCO2Emission()
-{
-    cout << "Calculating CO2 emission..." << endl;
-    string source, destination;
-    cout << "Enter source city: ";
-    cin >> source;
-   cout << "Enter destination city: ";
-    cin >> destination;
-
-    int distance = calculateDistance(source, destination);
-    if (distance == -1)
     {
-        cout << "Distance between the specified cities not found." <<endl;
-        return;
-    }
+        cout << "Calculating CO2 emission..." << endl;
+        string source, destination;
+        cout << "Enter source city: ";
+        cin >> source;
+        cout << "Enter destination city: ";
+        cin >> destination;
 
-    double emission = distance * 16.0; // Emission in grams
-    cout << "Total CO2 emission for the trip: " << emission << " grams" << endl;
+        int distance = calculateDistance(source, destination);
 
-    if (emission > 500)
-    {
-       cout << "Your emissions are high. Consider the following measures to reduce them:" << endl;
-        cout << "- Use public transportation where possible." << endl;
-        cout << "- Carpool with others to reduce the number of vehicles on the road." << endl;
-        cout << "- Choose fuel-efficient vehicles or consider electric options." <<endl;
-        cout << "- Plan your trips efficiently to minimize distance traveled." << endl;
+        double emission = distance * 16.0; // Emission in grams
+        cout << "Total CO2 emission for the trip: " << emission << " grams" << endl;
+
+        if (emission > 500)
+        {
+            cout << "Your emissions are high. Consider the following measures to reduce them:" << endl;
+            cout << "- Use public transportation where possible." << endl;
+            cout << "- Carpool with others to reduce the number of vehicles on the road." << endl;
+            cout << "- Choose fuel-efficient vehicles or consider electric options." <<endl;
+            cout << "- Plan your trips efficiently to minimize distance traveled." << endl;
+        }
+        else 
+        {
+            cout << "Remember, as Antoine de Saint-Exupery said," << endl;
+            cout << "\"We do not inherit the earth from our ancestors, we borrow it from our children.\"" << endl;
+            cout << "Let's make choices that ensure a brighter future for the next generations." << endl;
+            cout << endl;
+            cout << "You can also help the environment by creating butterfly-friendly habitats in your backyard." << endl;
+            cout << "Plant native flowers like milkweed, butterfly bush, and aster to attract butterflies." << endl;
+            cout << "Avoid using pesticides, as they can harm butterfly populations." << endl;
+        }
+        Sleep(2000);
     }
-}
-    
- void exitProgram()
+    void exitProgram()
     {
         cout << "Exiting program..." << endl;
         thankYouPage();
