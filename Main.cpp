@@ -400,10 +400,6 @@ public:
     string getCarModel() { return trim(carModel); }
     double getFare() { return fare; }
     double getDistance() { return distance; }
-    void setRideInfoFromStream(istringstream &iss)
-    {
-        iss >> rideID >> date >> time >> sourceCity >> destinationCity >> maxPassengers >> currentPassengers >> carModel >> fare >> distance;
-    }
 
     void setCurrentPassengers(int passengers)
     {
@@ -423,12 +419,6 @@ public:
         }
     }
 
-    string getRideInfoAsString() const
-    {
-        std::ostringstream oss;
-        oss << rideID << " " << date << " " << time << " " << sourceCity << " " << destinationCity << " " << maxPassengers << " " << currentPassengers << " " << carModel << " " << fare << " " << distance;
-        return oss.str();
-    }
 
     string generateRandomRideID()
     {
@@ -977,106 +967,98 @@ private:
 
         file.close();
     }
-    void joinPool()
-    {
-        cout << "Joining a pool..." << endl;
+     
+    void joinPool() {
+    // Prompt user for input
+    cout << "Joining a pool..." << endl;
+    int numPeople;
+    cout << "Enter the number of people for carpool: ";
+    cin >> numPeople;
+    cin.ignore();
 
-        // Ask user how many people want to do carpool
-        int numPeople;
-        cout << "Enter the number of people for carpool: ";
-        cin >> numPeople;
-        cin.ignore();
+    string sourceCity, destinationCity;
+    cout << "Enter Source City: ";
+    getline(cin, sourceCity);
+    cout << "Enter Destination City: ";
+    getline(cin, destinationCity);
 
-        // Ask user to enter Source City and Destination City
-        string sourceCity, destinationCity;
-        cout << "Enter Source City: ";
-        getline(cin, sourceCity);
-        cout << "Enter Destination City: ";
-        getline(cin, destinationCity);
+    // Open file for reading and writing
+    ifstream file("Files/admin/upcomingRides.txt");
+    if (!file) {
+        cerr << "Error opening file" << endl;
+        return;
+    }
 
-        // Open file for reading
-        ifstream file("Files/admin/upcomingRides.txt");
-        if (!file)
-        {
-            cerr << "Error opening file" << endl;
-            return;
-        }
+    string line;
+    bool rideFound = false;
+    ofstream tempFile("Files/admin/temp.txt");
+    if (!tempFile) {
+        cerr << "Error opening temp file for writing." << endl;
+        return;
+    }
 
-        string line;
-        bool rideFound = false;
-        ofstream tempFile("Files/admin/temp.txt");
+    while (getline(file, line)) {
+        istringstream iss(line);
 
-        if (!tempFile)
-        {
-            cerr << "Error opening temp file for writing." << endl;
-            return;
-        }
+        // Extract ride details directly into variables
+        string rideID, date, time, carModel;
+        int maxPassengers, currentPassengers;
+        double fare, distance;
 
-        while (getline(file, line))
-        {
-            istringstream iss(line);
-            Ride ride;
+        iss >> rideID >> date >> time >> sourceCity >> destinationCity >> maxPassengers >> currentPassengers >> carModel >> fare >> distance;
 
-            // Parse ride information using Ride member functions
-            ride.setRideInfoFromStream(iss);
+        Ride ride(date, time, sourceCity, destinationCity, maxPassengers, currentPassengers, carModel, fare, distance);
 
-            // Check if the source and destination cities match
-            if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers())
-            {
-                rideFound = true;
+        // Check if the source and destination cities match
+        if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers()) {
+            rideFound = true;
 
-                cout << "Ride ID: " << ride.getRideID() << endl;
-                cout << "Date: " << ride.getDate() << endl;
-                cout << "Time: " << ride.getTime() << endl;
-                cout << "Car Model: " << ride.getCarModel() << endl;
-                cout << "Fare: " << fixed << setprecision(2) << ride.getFare() * 0.9 << " Rs" << endl; // Reduced fare by 10%
-                cout << "Distance: " << ride.getDistance() << " km" << endl;
+            // Display ride details
+            cout << "Ride ID: " << rideID << endl;
+            cout << "Date: " << date << endl;
+            cout << "Time: " << time << endl;
+            cout << "Car Model: " << carModel << endl;
+            cout << "Fare: " << fixed << setprecision(2) << fare * 0.9 << " Rs" << endl; // Reduced fare by 10%
+            cout << "Distance: " << distance << " km" << endl;
 
-                // Ask the user if they want to take this ride
-                string choice;
-                cout << "Do you want to take this ride? (y(yes)/n(no)): ";
-                cin >> choice;
+            // Ask the user if they want to take this ride
+            string choice;
+            cout << "Do you want to take this ride? (y(yes)/n(no)): ";
+            cin >> choice;
 
-                if (choice == "y")
-                {
-                    // Check if there are available seats
-                    if (ride.getCurrentPassengers() < ride.getMaxPassengers())
-                    {
-                        ride.setCurrentPassengers(ride.getCurrentPassengers() + 1);
-                        tempFile << ride.getRideInfoAsString() << endl; // Write updated ride information to temp file
-                        cout << "Ride booked successfully!" << endl;
-                    }
-                    else
-                    {
-                        cout << "No seats available for this ride." << endl;
-                    }
+            if (choice == "y") {
+                // Check if there are available seats
+                if (currentPassengers < maxPassengers) {
+                    currentPassengers++;
+                    tempFile << ride.toString() << endl; // Write updated ride information to temp file
+                    cout << "Ride booked successfully!" << endl;
+                } else {
+                    cout << "No seats available for this ride." << endl;
                 }
             }
-
-            // Write original or updated ride information to temp file
-            tempFile << ride.getRideInfoAsString() << endl;
         }
 
-        file.close();
-        tempFile.close();
-
-        // Replacing original file with temp file
-        if (remove("Files/admin/upcomingRides.txt") != 0)
-        {
-            cerr << "Error removing original file." << endl;
-            return;
-        }
-        if (rename("Files/admin/temp.txt", "Files/admin/upcomingRides.txt") != 0)
-        {
-            cerr << "Error renaming file." << endl;
-            return;
-        }
-
-        if (!rideFound)
-        {
-            cout << "No available rides match the given source and destination, or all available seats are already booked." << endl;
-        }
+        // Write original or updated ride information to temp file
+        tempFile << line << endl;
     }
+
+    file.close();
+    tempFile.close();
+
+    // Replacing original file with temp file
+    if (remove("Files/admin/upcomingRides.txt") != 0) {
+        cerr << "Error removing original file." << endl;
+        return;
+    }
+    if (rename("Files/admin/temp.txt", "Files/admin/upcomingRides.txt") != 0) {
+        cerr << "Error renaming file." << endl;
+        return;
+    }
+
+    if (!rideFound) {
+        cout << "No available rides match the given source and destination, or all available seats are already booked." << endl;
+    }
+}
      
     void  cancelBooking()
     {
@@ -1219,19 +1201,75 @@ private:
                 cout << "Fare: " << fixed << setprecision(2) << ride.getFare()<< " Rs" << endl; 
                 cout << "Distance: " << ride.getDistance() << " km" << endl;
                 cout<<"here is link to share the ride"<<endl;
-                system("xdg-open https://randomqr.com/");
+                system("start https://randomqr.com/funny-qrcodes/");
+
             }
         }
         if (!rideFound)
             cout << "No rides available to share specified source and destination cities." << endl;
         file.close();
     }
-
-    void viewRewards()
-    {
-        cout << "Viewing rewards..." << endl;
-        // Implement logic for viewing rewards
+    
+    void viewRewards() {
+    cout << "Viewing rewards..." << endl;
+    ifstream inFile("Files/admin/upcomingRides.txt");
+    if (!inFile) {
+        cerr << "Error opening the file." << endl;
+        return;
     }
+
+    int totalDistance = 0;
+    int totalRides = 0;
+
+    // Read the file and accumulate total distance and rides
+    string rideID, date, time, sourceCity, destinationCity, carModel;
+    int maxPassengers, currentPassengers, fare, distance;
+    while (inFile >> rideID >> date >> time >> sourceCity >> destinationCity >> maxPassengers >> currentPassengers >> carModel >> fare >> distance) {
+        cout << "Processing ride: " << rideID << " Distance: " << distance << endl; // Debugging line
+        // Accumulate total distance and count rides
+        totalDistance += distance;
+        totalRides++;
+    }
+
+    inFile.close();
+
+    // Output total distance and rides for debugging
+    cout << "Total distance: " << totalDistance << " Total rides: " << totalRides << endl;
+
+    // Calculate reward points based on total distance
+    int rewardPoints = totalDistance / 50;
+
+    // Additional points for every extra ride after the first five rides
+    if (totalRides > 5) {
+        int extraRides = totalRides - 5;
+        rewardPoints += (extraRides * 10);
+    }
+
+    cout << "Total Reward Points: " << rewardPoints << endl;
+
+    // Determine current tier
+    int currentTier = 0;
+    if (rewardPoints >= 100)
+        currentTier = 1;
+    if (rewardPoints >= 200)
+        currentTier = 2;
+    if (rewardPoints >= 300)
+        currentTier = 3;
+
+    cout << "You are currently at Tier " << currentTier << endl;
+
+    // Display rewards available for redemption based on tier
+    cout << "Rewards Available:" << endl;
+    if (currentTier >= 1) {
+        cout << "Tier 1 Reward: Discount coupon on the next ride" << endl;
+    }
+    if (currentTier >= 2) {
+        cout << "Tier 2 Reward: Free upgrade to premium vehicle on the next ride" << endl;
+    }
+    if (currentTier >= 3) {
+        cout << "Tier 3 Reward: Free ride up to a certain distance" << endl;
+    }
+}
 
     void calculateCO2Emission()
     {
