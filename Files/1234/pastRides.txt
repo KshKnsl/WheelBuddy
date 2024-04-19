@@ -1,5 +1,6 @@
 | Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |
 |------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|
+| lqace      | 2002-05-10  | 12:34  | Mumbai       | Pune              | 7              | 2                   | Fortuner      | 2360     | 150           |
 | S82fL      | 2022-10-08  | 04:07  | delhi        | noida             | 5              | 4                   | hjfjh         | 7500     | 500           |
 | A1B2C      | 2023-12-20  | 08:00  | Mumbai       | Delhi             | 4              | 3                   | Toyota Camry  | 1200     | 1200          |
 | D3E4F      | 2023-12-25  | 12:30  | Mumbai       | Bangalore         | 4              | 2                   | Honda Civic   | 980      | 980           |

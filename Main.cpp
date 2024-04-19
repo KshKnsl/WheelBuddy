@@ -718,6 +718,9 @@ public:
 private:
     void bookRide(User *user)
     {
+        system("color E1");
+        system("cls");
+
         cout << "Booking a ride..." << endl;
         // Implementing logic for booking a ride
         string rideID, date, time, sourceCity, destinationCity, carModel;
@@ -752,6 +755,9 @@ private:
     }
     void offerRide()
     {
+        system("color 4F");
+        system("cls");
+
         cout << "Offering a ride..." << endl;
         string date, time, sourceCity, destinationCity, carModel;
         int maxPassengers, currentPassengers;
@@ -781,6 +787,9 @@ private:
     }
     void viewUpcomingRides(User *user)
     {
+        system("color 1F");
+        system("cls");
+
         cout << "Viewing upcoming rides..." << endl;
         string fileName = "./Files/" + user->getUsername() + "/upcomingRides.txt";
         vector<Ride> rides;
@@ -793,13 +802,19 @@ private:
         }
 
         string line;
+        cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
         while (getline(file, line))
         {
             cout << line << endl;
         }
+        cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
+        cout<<endl<<endl;
     }
     void viewPastRides(User *user)
     {
+        system("color 5A");
+        system("cls");
+
         cout << "Viewing past rides..." << endl;
         string fileName = "./Files/" + user->getUsername() + "/pastRides.txt";
         vector<Ride> rides;
@@ -811,15 +826,21 @@ private:
         }
         
         string line;
+        cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
         while (getline(file, line))
         {
             cout << line << endl;
         }
+        cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
+        cout<<endl<<endl;
     }
     void manageProfile(User *user)
     {
+        system("color 3F");
+        system("cls");
+
         cout << "Managing profile..." << endl;
-        string fileName = "./Files/" + user->getUsername() + "userDetails.txt";
+        string fileName = "./Files/" + user->getUsername() + "/userDetails.txt";
         ofstream file(fileName);
         string username, fullName, age, gender, email, address, phone, aadharNo, memberSince, ridesTaken, amountSpent;
 
@@ -876,6 +897,7 @@ private:
     }
     void OldBills(User *user)
     {
+        system("cls");
         string id;
         cout << "Please enter Ride id:" << endl;
         cin >> id;
@@ -923,6 +945,8 @@ private:
     }
     void searchRides()
     {
+        system("cls");
+     
         cout << "Searching for rides..." << endl;
         string sourceCity, destinationCity, date, time;
         cout << "Enter source city: ";
@@ -968,97 +992,79 @@ private:
         file.close();
     }
      
-    void joinPool() {
-    // Prompt user for input
-    cout << "Joining a pool..." << endl;
-    int numPeople;
-    cout << "Enter the number of people for carpool: ";
-    cin >> numPeople;
-    cin.ignore();
+    void joinPool() 
+    {
+        cout << "Joining a pool..." << endl;
 
-    string sourceCity, destinationCity;
-    cout << "Enter Source City: ";
-    getline(cin, sourceCity);
-    cout << "Enter Destination City: ";
-    getline(cin, destinationCity);
+        int numPeople;
+        cout << "Enter the number of people for carpool: ";
+        cin >> numPeople;
+        if (cin.fail() || numPeople <= 0) 
+        {
+            cout << "Invalid input for number of people." << endl;
+            return;
+        }
+        cin.ignore();
 
-    // Open file for reading and writing
-    ifstream file("Files/admin/upcomingRides.txt");
-    if (!file) {
-        cerr << "Error opening file" << endl;
-        return;
-    }
+        string sourceCity, destinationCity;
+        cout << "Enter Source City: ";
+        getline(cin, sourceCity);
+        cout << "Enter Destination City: ";
+        getline(cin, destinationCity);
 
-    string line;
-    bool rideFound = false;
-    ofstream tempFile("Files/admin/temp.txt");
-    if (!tempFile) {
-        cerr << "Error opening temp file for writing." << endl;
-        return;
-    }
+        ifstream file("Files/admin/upcomingRides.txt");
+        ofstream tempFile("Files/admin/temp.txt");
+        
+        string line;
+        bool rideFound = false;
+        getline(file, line);
+        tempFile << line << endl;
+        getline(file, line);
+        tempFile << line << endl;
+        while(getline(file, line)) 
+        {
+            Ride ride(line);
+            if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers()) 
+            {
+                rideFound = true;
+                cout << "Ride details:" << endl;
+                cout << "Ride ID: " << ride.getRideID() << endl;
+                cout << "Date: " << ride.getDate() << endl;
+                cout << "Time: " << ride.getTime() << endl;
+                cout << "Car Model: " << ride.getCarModel() << endl;
+                cout << "Fare: " << fixed << setprecision(2) << ride.getFare() * 0.9 << " Rs" << endl; // Reduced fare by 10%
+                cout << "Distance: " << ride.getDistance() << " km" << endl;
 
-    while (getline(file, line)) {
-        istringstream iss(line);
-
-        // Extract ride details directly into variables
-        string rideID, date, time, carModel;
-        int maxPassengers, currentPassengers;
-        double fare, distance;
-
-        iss >> rideID >> date >> time >> sourceCity >> destinationCity >> maxPassengers >> currentPassengers >> carModel >> fare >> distance;
-
-        Ride ride(date, time, sourceCity, destinationCity, maxPassengers, currentPassengers, carModel, fare, distance);
-
-        // Check if the source and destination cities match
-        if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers()) {
-            rideFound = true;
-
-            // Display ride details
-            cout << "Ride ID: " << rideID << endl;
-            cout << "Date: " << date << endl;
-            cout << "Time: " << time << endl;
-            cout << "Car Model: " << carModel << endl;
-            cout << "Fare: " << fixed << setprecision(2) << fare * 0.9 << " Rs" << endl; // Reduced fare by 10%
-            cout << "Distance: " << distance << " km" << endl;
-
-            // Ask the user if they want to take this ride
-            string choice;
-            cout << "Do you want to take this ride? (y(yes)/n(no)): ";
-            cin >> choice;
-
-            if (choice == "y") {
-                // Check if there are available seats
-                if (currentPassengers < maxPassengers) {
-                    currentPassengers++;
-                    tempFile << ride.toString() << endl; // Write updated ride information to temp file
-                    cout << "Ride booked successfully!" << endl;
-                } else {
-                    cout << "No seats available for this ride." << endl;
+                string choice;
+                cout << "Do you want to take this ride? (y(yes)/n(no)): ";
+                cin >> choice;
+                if (choice == "y" || choice == "yes") 
+                {
+                    if (ride.getCurrentPassengers() < ride.getMaxPassengers()) 
+                    {
+                        ride.setCurrentPassengers(ride.getCurrentPassengers() + numPeople);
+                        cout << "Ride booked successfully!" << endl;
+                        break;
+                    } 
+                    else 
+                    {
+                        cout << "No seats available for this ride." << endl;
+                    }
                 }
             }
+            tempFile << ride.toString() << endl;
         }
 
-        // Write original or updated ride information to temp file
-        tempFile << line << endl;
-    }
+        file.close();
+        tempFile.close();
 
-    file.close();
-    tempFile.close();
-
-    // Replacing original file with temp file
-    if (remove("Files/admin/upcomingRides.txt") != 0) {
-        cerr << "Error removing original file." << endl;
-        return;
+        if (!rideFound) 
+        {
+            cout << "No available rides match the given source and destination, or all available seats are already booked." << endl;
+        }
+        remove("Files/admin/upcomingRides.txt");
+        rename("Files/admin/temp.txt", "Files/admin/upcomingRides.txt");
     }
-    if (rename("Files/admin/temp.txt", "Files/admin/upcomingRides.txt") != 0) {
-        cerr << "Error renaming file." << endl;
-        return;
-    }
-
-    if (!rideFound) {
-        cout << "No available rides match the given source and destination, or all available seats are already booked." << endl;
-    }
-}
      
     void  cancelBooking()
     {
