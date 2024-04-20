@@ -1207,7 +1207,15 @@ private:
                 cout << "Fare: " << fixed << setprecision(2) << ride.getFare()<< " Rs" << endl; 
                 cout << "Distance: " << ride.getDistance() << " km" << endl;
                 cout<<"here is link to share the ride"<<endl;
+                cout<<"click 1 to open and 2 to not"<<endl;
+                int m;
+                cin>>m;
+                if(m==1){
                 system("start https://randomqr.com/funny-qrcodes/");
+                }
+                else{
+                    cout<<"thanks for using this feature"<<endl;
+                }
 
             }
         }
@@ -1217,6 +1225,7 @@ private:
     }
     
     void viewRewards() {
+    
     cout << "Viewing rewards..." << endl;
     ifstream inFile("Files/admin/upcomingRides.txt");
     if (!inFile) {
