@@ -588,6 +588,38 @@ public:
         return totalCost;
     }
 
+      // Function to calculate reward points based on distance
+    int calculatePoints(int distance) {
+        return (distance / 100) * 10; // 10 points per 100 km
+    }
+
+    // Function to determine incentives based on points and user ID
+    string determineIncentive(int points) {
+        string incentive;
+        if (points >= 100 && points < 200) {
+            incentive = "Discount coupon on the next ride";
+        } else if (points >= 200 && points < 300) {
+            incentive = "Free upgrade to premium vehicle on the next ride";
+        } else if (points >= 300) {
+            incentive = "Free ride up to a certain distance";
+        }
+
+        // Save incentive details based on user ID
+        if (!incentive.empty()) {
+            ofstream incentiveFile("CodeRelatedFiles/rewardstaken.txt", ios::app);
+            if (incentiveFile.is_open()) {
+                string z;
+                cout<<"enter username"<<endl;
+                cin>>z;
+                incentiveFile <<"Username:"<<z<<"Incentive" << incentive << endl;
+                incentiveFile.close();
+            } else {
+                cerr << "Unable to open file for writing incentives." << endl;
+            }
+        }
+        return incentive;
+    }
+
     // Function to print the bill in a proper format
     void printBill(string source, string destination, int distance, int carCapacity)
     {
@@ -1225,8 +1257,8 @@ private:
     }
     
     void viewRewards() {
-    
-    cout << "Viewing rewards..." << endl;
+
+    BillCalculator bill;
     ifstream inFile("Files/admin/upcomingRides.txt");
     if (!inFile) {
         cerr << "Error opening the file." << endl;
@@ -1234,57 +1266,30 @@ private:
     }
 
     int totalDistance = 0;
-    int totalRides = 0;
 
-    // Read the file and accumulate total distance and rides
+    string userID;
+    cout << "Enter User ID: ";
+    cin >> userID;
+
     string rideID, date, time, sourceCity, destinationCity, carModel;
     int maxPassengers, currentPassengers, fare, distance;
     while (inFile >> rideID >> date >> time >> sourceCity >> destinationCity >> maxPassengers >> currentPassengers >> carModel >> fare >> distance) {
-        cout << "Processing ride: " << rideID << " Distance: " << distance << endl; // Debugging line
-        // Accumulate total distance and count rides
-        totalDistance += distance;
-        totalRides++;
+        // Calculate distance between source and destination
+        int rideDistance = bill.calculateDistance(sourceCity, destinationCity);
+        totalDistance += rideDistance;
+
+        // Calculate points based on distance
+        int points = bill.calculatePoints(rideDistance);
+
+        // Determine incentives based on points and save incentive details
+        string incentive = bill.determineIncentive(points);
+        cout << "Ride ID: " << rideID << ", Distance: " << rideDistance << " km, Points: " << points << ", Incentive: " << incentive << endl;
     }
 
     inFile.close();
-
-    // Output total distance and rides for debugging
-    cout << "Total distance: " << totalDistance << " Total rides: " << totalRides << endl;
-
-    // Calculate reward points based on total distance
-    int rewardPoints = totalDistance / 50;
-
-    // Additional points for every extra ride after the first five rides
-    if (totalRides > 5) {
-        int extraRides = totalRides - 5;
-        rewardPoints += (extraRides * 10);
-    }
-
-    cout << "Total Reward Points: " << rewardPoints << endl;
-
-    // Determine current tier
-    int currentTier = 0;
-    if (rewardPoints >= 100)
-        currentTier = 1;
-    if (rewardPoints >= 200)
-        currentTier = 2;
-    if (rewardPoints >= 300)
-        currentTier = 3;
-
-    cout << "You are currently at Tier " << currentTier << endl;
-
-    // Display rewards available for redemption based on tier
-    cout << "Rewards Available:" << endl;
-    if (currentTier >= 1) {
-        cout << "Tier 1 Reward: Discount coupon on the next ride" << endl;
-    }
-    if (currentTier >= 2) {
-        cout << "Tier 2 Reward: Free upgrade to premium vehicle on the next ride" << endl;
-    }
-    if (currentTier >= 3) {
-        cout << "Tier 3 Reward: Free ride up to a certain distance" << endl;
-    }
+    cout << "Total distance: " << totalDistance << endl;
 }
+
 
     void calculateCO2Emission()
     {
