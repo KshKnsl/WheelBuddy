@@ -1267,53 +1267,72 @@ private:
         }
     }
 
-    void inviteFriends()
-    {
-        ifstream file("Files/admin/upcomingRides.txt");
+    void inviteFriends() {
+    
+    ifstream file("Files/admin/upcomingRides.txt");
+    string line;
+    bool rideFound = false;
 
-        string line;
-        string sourceCity, destinationCity;
-        bool rideFound = false;
+    cout << "Enter Ride ID: ";
+    string rideID;
+    cin >> rideID;
 
-        cout << "Enter source city: ";
-        cin >> sourceCity;
-        cout << "Enter destination city: ";
-        cin >> destinationCity;
+    getline(file, line);  // Skipping headers to avoid any errors
+    getline(file, line);
 
-        getline(file, line);
-        getline(file, line);
-        while (getline(file, line))
-        {
-            Ride ride(line);
-            // Parse ride information using Ride member functions
-            // Check if the source and destination cities match
-            if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers())
-            {
-                rideFound = true;
-                cout << "Ride ID: " << ride.getRideID() << endl;
-                cout << "Date: " << ride.getDate() << endl;
-                cout << "Time: " << ride.getTime() << endl;
-                cout << "Car Model: " << ride.getCarModel() << endl;
-                cout << "Fare: " << fixed << setprecision(2) << ride.getFare() << " Rs" << endl;
-                cout << "Distance: " << ride.getDistance() << " km" << endl;
-                cout << "here is link to share the ride" << endl;
-                cout << "click 1 to open and 2 to not" << endl;
-                int m;
-                cin >> m;
-                if (m == 1)
-                {
-                    system("start https://randomqr.com/funny-qrcodes/");
+    while (getline(file, line)) {
+        Ride ride(line);
+        if (ride.getRideID() == rideID) {
+            rideFound = true;
+
+            cout << "Ride found!" << endl;
+            cout << "Source City: " << ride.getSourceCity() << endl;
+            cout << "Destination City: " << ride.getDestinationCity() << endl;
+            cout << "Date: " << ride.getDate() << endl;
+            cout << "Time: " << ride.getTime() << endl;
+            cout << "Car Model: " << ride.getCarModel() << endl;
+            cout << "Fare: " << fixed << setprecision(2) << ride.getFare() << " Rs" << endl;
+            cout << "Distance: " << ride.getDistance() << " km" << endl;
+            cout << "Current Passengers: " << ride.getCurrentPassengers() << endl;
+            cout << "Max Passengers: " << ride.getMaxPassengers() << endl;
+
+            if (ride.getCurrentPassengers() < ride.getMaxPassengers()) {
+                cout << "Would you like to invite a friend to this ride? (y/n): ";
+                char inviteChoice;
+                cin >> inviteChoice;
+
+                if (inviteChoice == 'y' || inviteChoice == 'Y') {
+                    // Increment the passenger count
+                    ride.setCurrentPassengers(ride.getCurrentPassengers() + 1);
+                    cout << "Passenger count updated." << endl;
+
+                    // Offer the QR code for sharing
+                    cout << "Would you like to share this ride via QR code? (y/n): ";
+                    char qrChoice;
+                    cin >> qrChoice;
+
+                    if (qrChoice == 'y' || qrChoice == 'Y') {
+                        system("start https://randomqr.com/funny-qrcodes/");
+                        cout << "QR code opened." << endl;
+                    } else {
+                        cout << "QR code not shared." << endl;
+                    }
+                } else {
+                    cout << "Invite cancelled." << endl;
                 }
-                else
-                {
-                    cout << "thanks for using this feature" << endl;
-                }
+            } else {
+                cout << "Sorry, this ride is at full capacity." << endl;
             }
+            break; 
         }
-        if (!rideFound)
-            cout << "No rides available to share specified source and destination cities." << endl;
-        file.close();
     }
+
+    if (!rideFound) {
+        cout << "No ride found with the given Ride ID." << endl;
+    }
+
+    file.close(); 
+}
 
     void viewRewards()
     {

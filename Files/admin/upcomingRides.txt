@@ -1,6 +1,6 @@
 | Ride ID    | Date        | Time   | Source City  | Destination City  | Max Passengers | Current Passengers  | Car Model     | Fare(Rs) | Distance (km) |
 |------------|-------------|--------|--------------|-------------------|----------------|---------------------|---------------|----------|---------------|
 | S3T4U      | 2024-06-05  | 08:45  | Mumbai       | Jaipur            | 5              | 5                   | Mahindra XUV  | 1200     | 1200          |
-| S3T4U      | 2024-06-05  | 08:45  | Mumbai       | Jaipur            | 5              | 5                   | Mahindra XUV  | 1200     | 1200          |
+| S3T4B      | 2024-06-05  | 08:45  | Mumbai       | Jaipur            | 5              | 5                   | Mahindra XUV  | 1200     | 1200          |
 | Y7Z8A      | 2024-07-20  | 11:15  | Mumbai       | Lucknow           | 6              | 4                   | Volkswagen    | 1500     | 1500          |
-| Y7Z8A      | 2024-07-20  | 11:15  | Mumbai       | Lucknow           | 6              | 4                   | Volkswagen    | 1500     | 1500          |
+| Y7Z8B      | 2024-07-20  | 11:15  | Mumbai       | Lucknow           | 6              | 4                   | Volkswagen    | 1500     | 1500          |
