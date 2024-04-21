@@ -672,44 +672,28 @@ public:
              << "\n";
 
         cout << "\t\t\t\t\t\t" << setw(60) << "|************************* Trip Bill **************************|\n";
-        cout << "\t\t\t\t\t\t"
-             << "|                                                              |" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|\tSource City: \t\t" << setw(25) << left << source << "      |" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|\tDestination City: \t" << setw(25) << left << destination << "      |" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|\tDistance: \t\t" << setw(15) << left << distance << " km             |\n";
-        cout << "\t\t\t\t\t\t"
-             << "|\tCar Capacity: \t\t" << setw(15) << left << carCapacity << " passengers     |\n";
-        cout << "\t\t\t\t\t\t"
-             << "|\t-------------------------------------------------------|\n";
-        cout << "\t\t\t\t\t\t"
-             << "|\tFuel Cost: \t\t\tRs." << setw(20) << left << distance * FUEL_COST_PER_KM << "|" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|\tMaintenance Cost: \t\tRs." << setw(20) << left << distance * MAINTENANCE_COST_PER_KM << "|" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|\tToll Cost: \t\t\tRs." << setw(20) << left << distance * TOLL_COST_PER_KM << "|" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|\tAdditional Cost: \t\tRs." << setw(20) << left << carCapacity * 20.0 << "|" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|\tDriver Cost: \t\t\tRs." << setw(20) << left << 200 << "|" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|\t-------------------------------------------------------|\n";
-        cout << "\t\t\t\t\t\t"
-             << "|\tTotal Cost: \t\t\tRs." << setw(10) << left << totalCost + 200 << "  only    |" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|                                                              |" << endl;
-        cout << "\t\t\t\t\t\t" << setw(60) << "|   # This is a computer-generated invoice and it does not     |" << endl;
-        cout << "\t\t\t\t\t\t" << setw(60) << "|     require an authorized signature #                        |" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|                                                              |" << endl;
-        cout << "\t\t\t\t\t\t" << setw(60) << "|//////////////////////////////////////////////////////////////|" << endl;
-        cout << "\t\t\t\t\t\t" << setw(60) << "|You are advised to pay up the amount before the due date.     |" << endl;
-        cout << "\t\t\t\t\t\t" << setw(60) << "|\t\tOtherwise, a penalty fee will be applied       |" << endl;
-        cout << "\t\t\t\t\t\t" << setw(60) << "|//////////////////////////////////////////////////////////////|" << endl;
-        cout << "\t\t\t\t\t\t"
-             << "|                                                              |" << endl;
+        cout << "\t\t\t\t\t\t"<< "|                                                              |" << endl;
+        cout << "\t\t\t\t\t\t"<< "|\tSource City: \t\t" << setw(25) << left << source << "      |" << endl;
+        cout << "\t\t\t\t\t\t"<< "|\tDestination City: \t" << setw(25) << left << destination << "      |" << endl;
+        cout << "\t\t\t\t\t\t"<< "|\tDistance: \t\t" << setw(15) << left << distance << " km             |\n";
+        cout << "\t\t\t\t\t\t"<< "|\tCar Capacity: \t\t" << setw(15) << left << carCapacity << " passengers     |\n";
+        cout << "\t\t\t\t\t\t"<< "|\t-------------------------------------------------------|\n";
+        cout << "\t\t\t\t\t\t"<< "|\tFuel Cost: \t\t\tRs." << setw(20) << left << distance * FUEL_COST_PER_KM << "|" << endl;
+        cout << "\t\t\t\t\t\t"<< "|\tMaintenance Cost: \t\tRs." << setw(20) << left << distance * MAINTENANCE_COST_PER_KM << "|" << endl;
+        cout << "\t\t\t\t\t\t"<< "|\tToll Cost: \t\t\tRs." << setw(20) << left << distance * TOLL_COST_PER_KM << "|" << endl;
+        cout << "\t\t\t\t\t\t"<< "|\tAdditional Cost: \t\tRs." << setw(20) << left << carCapacity * 20.0 << "|" << endl;
+        cout << "\t\t\t\t\t\t"<< "|\tDriver Cost: \t\t\tRs." << setw(20) << left << 200 << "|" << endl;
+        cout << "\t\t\t\t\t\t"<< "|\t-------------------------------------------------------|\n";
+        cout << "\t\t\t\t\t\t"<< "|\tTotal Cost: \t\t\tRs." << setw(10) << left << totalCost + 200 << "  only    |" << endl;
+        cout << "\t\t\t\t\t\t"<< "|                                                              |" << endl;
+        cout << "\t\t\t\t\t\t"<< setw(60) << "|   # This is a computer-generated invoice and it does not     |" << endl;
+        cout << "\t\t\t\t\t\t"<< setw(60) << "|     require an authorized signature #                        |" << endl;
+        cout << "\t\t\t\t\t\t"<< "|                                                              |" << endl;
+        cout << "\t\t\t\t\t\t"<< setw(60) << "|//////////////////////////////////////////////////////////////|" << endl;
+        cout << "\t\t\t\t\t\t"<< setw(60) << "|You are advised to pay up the amount before the due date.     |" << endl;
+        cout << "\t\t\t\t\t\t"<< setw(60) << "|\t\tOtherwise, a penalty fee will be applied       |" << endl;
+        cout << "\t\t\t\t\t\t"<< setw(60) << "|//////////////////////////////////////////////////////////////|" << endl;
+        cout << "\t\t\t\t\t\t"<< "|                                                              |" << endl;
         cout << "\t\t\t\t\t\t" << setw(60) << "************************** Thank You! **************************\n";
     }
 };
@@ -724,7 +708,7 @@ public:
         cout << endl;
         cout << "\t\t\t\t\t||========================================= Menu =========================================||" << endl;
         cout << "\t\t\t\t\t|| 1. Book a Ride\t\t2. Offer a Ride\t\t3. View Upcoming Rides \t\t  ||" << endl;
-        cout << "\t\t\t\t\t|| 4. View Past Rides\t\t5. Manage Profile\t6. Old Bills       \t\t  ||" << endl;
+        cout << "\t\t\t\t\t|| 4. View Past Rides\t\t5. Manage Profile\t6. Print Bills     \t\t  ||" << endl;
         cout << "\t\t\t\t\t|| 7. Search for Rides\t\t8. Join a Pool\t\t9. Cancel Booking  \t\t  ||" << endl;
         cout << "\t\t\t\t\t|| 10. Rate and Review\t\t11. Feedback\t\t12. Invite Friends   \t\t  ||" << endl;
         cout << "\t\t\t\t\t|| 13. View Rewards/Incentives\t14. CO2 Calculator\t15. Exit \t\t\t  ||" << endl;
@@ -760,7 +744,7 @@ public:
                 break;
             case 6:
                 flag = true;
-                OldBills(user);
+                printBills(user);
                 break;
             case 7:
                 flag = true;
@@ -987,7 +971,7 @@ private:
         // Close the file
         file.close();
     }
-    void OldBills(User *user)
+    void printBills(User *user)
     {
         system("cls");
         string id;
@@ -995,14 +979,11 @@ private:
         cin >> id;
 
         string fileName = "./Files/" + user->getUsername() + "/pastRides.txt";
+        string upcomingFileName = "./Files/" + user->getUsername() + "/upcomingRides.txt";
+        
         vector<Ride> rides;
 
         ifstream file(fileName);
-        if (!file.is_open())
-        {
-            cout << "Error opening file." << endl;
-            return; // Exit the function if file opening fails
-        }
 
         string line;
 
@@ -1018,7 +999,6 @@ private:
         bool found = false;
         for (Ride &ride : rides)
         {
-            cout << "." << ride.getRideID().substr(0, 5) << "." << endl;
             if (ride.getRideID().substr(0, 5) == id)
             {
                 found = true;
@@ -1033,7 +1013,36 @@ private:
 
         if (!found)
         {
-            cout << "Ride with ID " << id << " not found." << endl;
+            cout << "Ride with ID " << id << " not found in past rides." << endl;
+            vector<Ride> upcomingRides;
+            ifstream upcomingFile(upcomingFileName);
+            getline(upcomingFile, line); // skip header
+            getline(upcomingFile, line); // skip header
+            while (getline(upcomingFile, line))
+            {
+                Ride ride(line);
+                upcomingRides.push_back(ride);
+            }
+            upcomingFile.close();
+
+            for (Ride &ride : upcomingRides)
+            {
+                if (ride.getRideID().substr(0, 5) == id)
+                {
+                    found = true;
+                    Sleep(500);
+                    // Assuming you have a function to retrieve bill information from the Ride object
+                    cout << "Bill details for upcoming ride with ID " << id << ":" << endl;
+                    BillCalculator b;
+                    b.printBill(ride.getSourceCity(), ride.getDestinationCity(), ride.getDistance(), ride.getMaxPassengers());
+                    break; // No need to continue searching once found
+                }
+            }
+        }
+
+        if (!found)
+        {
+            cout << "Ride with ID " << id << " was not found." << endl;
         }
     }
     void searchRides()
