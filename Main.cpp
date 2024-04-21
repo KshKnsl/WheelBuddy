@@ -94,14 +94,14 @@ public:
         for (i = 0; i < 20; i++)
         {
             s[i] = _getch();
-            _putch('*');
             if (s[i] == 13)
                 break;
+            _putch('*');
         }
         s[i] = '\0'; // Null-terminate the character array
 
         password = s;
-        cout<<endl;
+        cout << endl;
         User *ob = new User(username, password);
         if (authenticate(username, password))
             return ob;
@@ -177,7 +177,7 @@ public:
         getline(cin, phone);
         cout << "Enter Aadhar Card No: ";
         getline(cin, aadharNo);
-        
+
         // Write user details to file
         userDetailsFile << "Username: " << username << endl;
         userDetailsFile << "Full Name: " << fullName << endl;
@@ -189,7 +189,7 @@ public:
         userDetailsFile << "Aadhar Card No: " << aadharNo << endl;
         userDetailsFile << "Member Since: " << memberSince << endl;
         userDetailsFile << "Total Rides Taken: " << 0 << endl;
-        
+
         // Close the file
         userDetailsFile.close();
     }
@@ -968,7 +968,7 @@ private:
         file1.close();
         file2.close();
         file << "Total Rides Taken: " << totalLines - 4 << endl;
-        
+
         // Close the file
         file.close();
     }
@@ -1101,11 +1101,12 @@ private:
         getline(file, line);
         tempFile << line << endl;
         getline(file, line);
+        bool found = false;
         tempFile << line << endl;
         while (getline(file, line))
         {
             Ride ride(line);
-            if (ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers())
+            if (found == false && ride.getSourceCity() == sourceCity && ride.getDestinationCity() == destinationCity && ride.getCurrentPassengers() < ride.getMaxPassengers())
             {
                 rideFound = true;
                 cout << "Ride details:" << endl;
@@ -1125,7 +1126,7 @@ private:
                     {
                         ride.setCurrentPassengers(ride.getCurrentPassengers() + numPeople);
                         cout << "Ride booked successfully!" << endl;
-                        break;
+                        found = true;
                     }
                     else
                     {
