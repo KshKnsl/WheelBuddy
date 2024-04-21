@@ -80,7 +80,7 @@ public:
     User *loginScreen()
     {
         system("cls");
-        system("Color DE");
+        system("Color A0");
         cout << "**************************************\n";
         cout << "*                 Login              *\n";
         cout << "**************************************\n";
@@ -223,7 +223,7 @@ public:
     // this function returns the choice of the user
     int homePage()
     {
-        system("color F6");
+        system("color 0A");
         cout << "\n  _____________________________________________________________________\n";
         cout << "||                                                                     ||\n";
         cout << "||   \\      /\\      / |===== |      |====== /=====\\ |\\    /| |=====    ||\n";
@@ -266,12 +266,12 @@ public:
             Sleep(2000);
             cout << "\n\n";
             system("color 5E");
+            Sleep(400);
             system("color 46");
+            Sleep(400);
             cout << "\nGoodbye! Have a great day!\n";
             system("cls");
             system("start vlc --fullscreen TMKOC.mp4");
-
-            Sleep(500);
             exit(0);
         }
         else
@@ -623,11 +623,11 @@ public:
     // Function to calculate reward points based on distance
     int calculatePoints(int distance)
     {
-        return (distance / 100) * 10; // 10 points per 100 km
+        return (distance / 100) * 5; // 10 points per 100 km
     }
 
     // Function to determine incentives based on points and user ID
-    string determineIncentive(int points)
+    string determineIncentive(int points, string z)
     {
         string incentive;
         if (points >= 100 && points < 200)
@@ -642,6 +642,10 @@ public:
         {
             incentive = "Free ride up to a certain distance";
         }
+        else
+        {
+            incentive = "Free spotify premium";
+        }
 
         // Save incentive details based on user ID
         if (!incentive.empty())
@@ -649,15 +653,8 @@ public:
             ofstream incentiveFile("CodeRelatedFiles/rewardstaken.txt", ios::app);
             if (incentiveFile.is_open())
             {
-                string z;
-                cout << "enter username" << endl;
-                cin >> z;
-                incentiveFile << "Username:" << z << "Incentive" << incentive << endl;
+                incentiveFile << "Username: " << z << " Incentive " << incentive << endl;
                 incentiveFile.close();
-            }
-            else
-            {
-                cerr << "Unable to open file for writing incentives." << endl;
             }
         }
         return incentive;
@@ -671,31 +668,48 @@ public:
         double totalCost = calculateTotalCost(distance, carCapacity);
         cout << "\n";
         cout << "\n";
-        cout << "\t\t\t\t\t\t" << "\n";
+        cout << "\t\t\t\t\t\t"
+             << "\n";
 
         cout << "\t\t\t\t\t\t" << setw(60) << "|************************* Trip Bill **************************|\n";
-        cout << "\t\t\t\t\t\t" << "|                                                              |" << endl;
-        cout << "\t\t\t\t\t\t" << "|\tSource City: \t\t" << setw(25) << left << source << "      |" << endl;
-        cout << "\t\t\t\t\t\t" << "|\tDestination City: \t" << setw(25) << left << destination << "      |" << endl;
-        cout << "\t\t\t\t\t\t" << "|\tDistance: \t\t" << setw(15) << left << distance << " km             |\n";
-        cout << "\t\t\t\t\t\t" << "|\tCar Capacity: \t\t" << setw(15) << left << carCapacity << " passengers     |\n";
-        cout << "\t\t\t\t\t\t" << "|\t-------------------------------------------------------|\n";
-        cout << "\t\t\t\t\t\t" << "|\tFuel Cost: \t\t\tRs." << setw(20) << left << distance * FUEL_COST_PER_KM << "|" << endl;
-        cout << "\t\t\t\t\t\t" << "|\tMaintenance Cost: \t\tRs." << setw(20) << left << distance * MAINTENANCE_COST_PER_KM << "|" << endl;
-        cout << "\t\t\t\t\t\t" << "|\tToll Cost: \t\t\tRs." << setw(20) << left << distance * TOLL_COST_PER_KM << "|" << endl;
-        cout << "\t\t\t\t\t\t" << "|\tAdditional Cost: \t\tRs." << setw(20) << left << carCapacity * 20.0 << "|" << endl;
-        cout << "\t\t\t\t\t\t" << "|\tDriver Cost: \t\t\tRs." << setw(20) << left << 200 << "|" << endl;
-        cout << "\t\t\t\t\t\t" << "|\t-------------------------------------------------------|\n";
-        cout << "\t\t\t\t\t\t" << "|\tTotal Cost: \t\t\tRs." << setw(10) << left << totalCost + 200 << "  only    |" << endl;
-        cout << "\t\t\t\t\t\t" << "|                                                              |" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|                                                              |" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|\tSource City: \t\t" << setw(25) << left << source << "      |" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|\tDestination City: \t" << setw(25) << left << destination << "      |" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|\tDistance: \t\t" << setw(15) << left << distance << " km             |\n";
+        cout << "\t\t\t\t\t\t"
+             << "|\tCar Capacity: \t\t" << setw(15) << left << carCapacity << " passengers     |\n";
+        cout << "\t\t\t\t\t\t"
+             << "|\t-------------------------------------------------------|\n";
+        cout << "\t\t\t\t\t\t"
+             << "|\tFuel Cost: \t\t\tRs." << setw(20) << left << distance * FUEL_COST_PER_KM << "|" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|\tMaintenance Cost: \t\tRs." << setw(20) << left << distance * MAINTENANCE_COST_PER_KM << "|" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|\tToll Cost: \t\t\tRs." << setw(20) << left << distance * TOLL_COST_PER_KM << "|" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|\tAdditional Cost: \t\tRs." << setw(20) << left << carCapacity * 20.0 << "|" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|\tDriver Cost: \t\t\tRs." << setw(20) << left << 200 << "|" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|\t-------------------------------------------------------|\n";
+        cout << "\t\t\t\t\t\t"
+             << "|\tTotal Cost: \t\t\tRs." << setw(10) << left << totalCost + 200 << "  only    |" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|                                                              |" << endl;
         cout << "\t\t\t\t\t\t" << setw(60) << "|   # This is a computer-generated invoice and it does not     |" << endl;
         cout << "\t\t\t\t\t\t" << setw(60) << "|     require an authorized signature #                        |" << endl;
-        cout << "\t\t\t\t\t\t" << "|                                                              |" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|                                                              |" << endl;
         cout << "\t\t\t\t\t\t" << setw(60) << "|//////////////////////////////////////////////////////////////|" << endl;
         cout << "\t\t\t\t\t\t" << setw(60) << "|You are advised to pay up the amount before the due date.     |" << endl;
         cout << "\t\t\t\t\t\t" << setw(60) << "|\t\tOtherwise, a penalty fee will be applied       |" << endl;
         cout << "\t\t\t\t\t\t" << setw(60) << "|//////////////////////////////////////////////////////////////|" << endl;
-        cout << "\t\t\t\t\t\t" << "|                                                              |" << endl;
+        cout << "\t\t\t\t\t\t"
+             << "|                                                              |" << endl;
         cout << "\t\t\t\t\t\t" << setw(60) << "************************** Thank You! **************************\n";
     }
 };
@@ -707,6 +721,7 @@ public:
     void displayMenu(User *user)
     {
         // this is just a outline you will have to modify it for proper working
+        cout << endl;
         cout << "\t\t\t\t\t||========================================= Menu =========================================||" << endl;
         cout << "\t\t\t\t\t|| 1. Book a Ride\t\t2. Offer a Ride\t\t3. View Upcoming Rides \t\t  ||" << endl;
         cout << "\t\t\t\t\t|| 4. View Past Rides\t\t5. Manage Profile\t6. Old Bills       \t\t  ||" << endl;
@@ -1267,108 +1282,127 @@ private:
         }
     }
 
-    void inviteFriends() {
-    
-    ifstream file("Files/admin/upcomingRides.txt");
-    string line;
-    bool rideFound = false;
+    void inviteFriends()
+    {
 
-    cout << "Enter Ride ID: ";
-    string rideID;
-    cin >> rideID;
+        ifstream file("Files/admin/upcomingRides.txt");
+        string line;
+        bool rideFound = false;
 
-    getline(file, line);  // Skipping headers to avoid any errors
-    getline(file, line);
+        cout << "Enter Ride ID: ";
+        string rideID;
+        cin >> rideID;
 
-    while (getline(file, line)) {
-        Ride ride(line);
-        if (ride.getRideID() == rideID) {
-            rideFound = true;
+        getline(file, line); // Skipping headers to avoid any errors
+        getline(file, line);
 
-            cout << "Ride found!" << endl;
-            cout << "Source City: " << ride.getSourceCity() << endl;
-            cout << "Destination City: " << ride.getDestinationCity() << endl;
-            cout << "Date: " << ride.getDate() << endl;
-            cout << "Time: " << ride.getTime() << endl;
-            cout << "Car Model: " << ride.getCarModel() << endl;
-            cout << "Fare: " << fixed << setprecision(2) << ride.getFare() << " Rs" << endl;
-            cout << "Distance: " << ride.getDistance() << " km" << endl;
-            cout << "Current Passengers: " << ride.getCurrentPassengers() << endl;
-            cout << "Max Passengers: " << ride.getMaxPassengers() << endl;
+        while (getline(file, line))
+        {
+            Ride ride(line);
+            if (ride.getRideID() == rideID)
+            {
+                rideFound = true;
 
-            if (ride.getCurrentPassengers() < ride.getMaxPassengers()) {
-                cout << "Would you like to invite a friend to this ride? (y/n): ";
-                char inviteChoice;
-                cin >> inviteChoice;
+                cout << "Ride found!" << endl;
+                cout << "Source City: " << ride.getSourceCity() << endl;
+                cout << "Destination City: " << ride.getDestinationCity() << endl;
+                cout << "Date: " << ride.getDate() << endl;
+                cout << "Time: " << ride.getTime() << endl;
+                cout << "Car Model: " << ride.getCarModel() << endl;
+                cout << "Fare: " << fixed << setprecision(2) << ride.getFare() << " Rs" << endl;
+                cout << "Distance: " << ride.getDistance() << " km" << endl;
+                cout << "Current Passengers: " << ride.getCurrentPassengers() << endl;
+                cout << "Max Passengers: " << ride.getMaxPassengers() << endl;
 
-                if (inviteChoice == 'y' || inviteChoice == 'Y') {
-                    // Increment the passenger count
-                    ride.setCurrentPassengers(ride.getCurrentPassengers() + 1);
-                    cout << "Passenger count updated." << endl;
+                if (ride.getCurrentPassengers() < ride.getMaxPassengers())
+                {
+                    cout << "Would you like to invite a friend to this ride? (y/n): ";
+                    char inviteChoice;
+                    cin >> inviteChoice;
 
-                    // Offer the QR code for sharing
-                    cout << "Would you like to share this ride via QR code? (y/n): ";
-                    char qrChoice;
-                    cin >> qrChoice;
+                    if (inviteChoice == 'y' || inviteChoice == 'Y')
+                    {
+                        // Increment the passenger count
+                        ride.setCurrentPassengers(ride.getCurrentPassengers() + 1);
+                        cout << "Passenger count updated." << endl;
 
-                    if (qrChoice == 'y' || qrChoice == 'Y') {
-                        system("start https://randomqr.com/funny-qrcodes/");
-                        cout << "QR code opened." << endl;
-                    } else {
-                        cout << "QR code not shared." << endl;
+                        // Offer the QR code for sharing
+                        cout << "Would you like to share this ride via QR code? (y/n): ";
+                        char qrChoice;
+                        cin >> qrChoice;
+
+                        if (qrChoice == 'y' || qrChoice == 'Y')
+                        {
+                            system("start https://randomqr.com/funny-qrcodes/");
+                            cout << "QR code opened." << endl;
+                        }
+                        else
+                        {
+                            cout << "QR code not shared." << endl;
+                        }
                     }
-                } else {
-                    cout << "Invite cancelled." << endl;
+                    else
+                    {
+                        cout << "Invite cancelled." << endl;
+                    }
                 }
-            } else {
-                cout << "Sorry, this ride is at full capacity." << endl;
+                else
+                {
+                    cout << "Sorry, this ride is at full capacity." << endl;
+                }
+                break;
             }
-            break; 
         }
-    }
 
-    if (!rideFound) {
-        cout << "No ride found with the given Ride ID." << endl;
-    }
+        if (!rideFound)
+        {
+            cout << "No ride found with the given Ride ID." << endl;
+        }
 
-    file.close(); 
-}
+        file.close();
+    }
 
     void viewRewards()
     {
-
         BillCalculator bill;
-        ifstream inFile("Files/admin/upcomingRides.txt");
-        if (!inFile)
-        {
-            cerr << "Error opening the file." << endl;
-            return;
-        }
-
-        int totalDistance = 0;
 
         string userID;
         cout << "Enter User ID: ";
         cin >> userID;
 
-        string rideID, date, time, sourceCity, destinationCity, carModel;
-        int maxPassengers, currentPassengers, fare, distance;
-        while (inFile >> rideID >> date >> time >> sourceCity >> destinationCity >> maxPassengers >> currentPassengers >> carModel >> fare >> distance)
+        // File path for user's past rides
+        string fileName = "./Files/" + userID + "/pastRides.txt";
+        ifstream inFile(fileName);
+
+        // Skip the header line
+        string header;
+        getline(inFile, header);
+        getline(inFile, header);
+
+        int totalDistance = 0;
+        int total_points;
+        string rideInfo;
+        string incentive;
+        while (getline(inFile, rideInfo))
         {
-            // Calculate distance between source and destination
-            int rideDistance = bill.calculateDistance(sourceCity, destinationCity);
-            totalDistance += rideDistance;
+            Ride ride(rideInfo);
 
             // Calculate points based on distance
-            int points = bill.calculatePoints(rideDistance);
+            int points = bill.calculatePoints(ride.getDistance());
+            total_points += points;
 
             // Determine incentives based on points and save incentive details
-            string incentive = bill.determineIncentive(points);
-            cout << "Ride ID: " << rideID << ", Distance: " << rideDistance << " km, Points: " << points << ", Incentive: " << incentive << endl;
+            incentive = bill.determineIncentive(points, userID);
+            cout << "Ride ID: " << ride.getRideID() << ", Distance: " << ride.getDistance() << " km, Points: " << points << endl;
+
+            // Update total distance
+            totalDistance += ride.getDistance();
         }
 
         inFile.close();
-        cout << "Total distance: " << totalDistance << endl;
+        cout << "Total distance: " << totalDistance << " km" << endl;
+        cout << "Total Points : " << total_points << endl;
+        cout << "Incentive : " << incentive << endl;
     }
 
     void calculateCO2Emission()
@@ -1453,7 +1487,7 @@ int main()
                 }
                 else
                 {
-                    exitProgramFlag = true;
+                    choice = page.homePage();
                 }
             }
             break;
@@ -1494,8 +1528,7 @@ int main()
         // Now display the dashboard
         Dashboard dash;
         dash.display(user->getUsername());
-        Sleep(3000);
-
+        Sleep(1000);
         Menu menu;
         // Display the menu
         while (true)
