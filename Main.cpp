@@ -56,8 +56,7 @@ private:
 public:
     /**
      * Constructs a LoginManager object by reading user data from a file.
-     * @param filename The name of the file containing user data.
-     */
+     * @param filename The name of the file containing user data.*/
     LoginManager(string filename)
     {
         ifstream fileIn(filename);
@@ -86,8 +85,7 @@ public:
 
     /**
      * Displays a login screen for user authentication.
-     * @return A pointer to a User object representing the logged-in user.
-     */
+     * @return A pointer to a User object representing the logged-in user.*/
     User *loginScreen()
     {
         system("cls");
@@ -130,8 +128,7 @@ class RegistrationManager
 public:
     /**
      * Registers a new user by creating an account with a username and password.
-     * @param filename The name of the file to store user information.
-     */
+     * @param filename The name of the file to store user information.*/
     static void registerUser(string &filename)
     {
         system("cls");
@@ -159,8 +156,7 @@ public:
 
     /**
      * Creates a folder with the given name and initializes necessary files within it.
-     * @param folderName The name of the folder to be created.
-     */
+     * @param folderName The name of the folder to be created.*/
     static void createFolder(string folderName)
     {
         // Create the folder
@@ -242,8 +238,7 @@ public:
     // this function returns the choice of the user
     /**
      * Displays the home page of the Wheel Buddy application and prompts the user for a choice.
-     * @return The user's choice selected from the home page menu.
-     */
+     * @return The user's choice selected from the home page menu.*/
     int homePage()
     {
         system("color 0A");
@@ -270,8 +265,7 @@ public:
     /**
      * Displays a thank you message and prompts the user to confirm exit.
      * If confirmed, displays a goodbye message, plays a video, and exits the program.
-     * If not confirmed, exits the program.
-     */
+     * If not confirmed, exits the program.*/
     void thankYouPage()
     {
         cout << "\nAre you sure you want to exit? (YES/NO)---";
@@ -315,8 +309,7 @@ class Dashboard : public Pages
 public:
     /**
      * Displays the user dashboard with user details and upcoming rides.
-     * @param username The username of the user to display the dashboard for.
-     */
+     * @param username The username of the user to display the dashboard for.*/
     void display(string username)
     {
         system("color E4");
@@ -379,8 +372,7 @@ public:
 
     /**
      * Constructs a Ride object from a string input.
-     * @param s The string containing ride information separated by '|'.
-     */
+     * @param s The string containing ride information separated by '|'.*/
     Ride(string s)
     {
         stringstream ss(s);
@@ -451,8 +443,7 @@ public:
      * @param carModel The model of the car for the ride.
      * @param fare The fare for the ride.
      * @param distance The distance of the ride.
-     * @returns A Ride object with the specified details.
-     */
+     * @returns A Ride object with the specified details.*/
     Ride(string date, string time, string sourceCity, string destinationCity,
          int maxPassengers, int currentPassengers, string carModel, double fare, double distance)
     {
@@ -487,8 +478,7 @@ public:
     /**
      * Trims leading and trailing whitespace characters from a given string.
      * @param str The input string to be trimmed.
-     * @returns The trimmed string with leading and trailing whitespace removed.
-     */
+     * @returns The trimmed string with leading and trailing whitespace removed.*/
     string trim(const string &str)
     {
         size_t firstNonSpace = str.find_first_not_of(" \t\n\r"); // Find index of first non-whitespace character
@@ -625,8 +615,7 @@ public:
     /**
      * Writes the details of rides to a file in a tabular format.
      * @param fileName The name of the file to write the ride details to.
-     * @param rides A vector containing Ride objects with details to be written.
-     */
+     * @param rides A vector containing Ride objects with details to be written.*/
     void writeRides(string fileName, vector<Ride> &rides)
     {
         ofstream file(fileName);
@@ -657,8 +646,7 @@ public:
      * Calculates the distance between a given source and destination.
      * @param source The source location.
      * @param destination The destination location.
-     * @returns The distance between the source and destination.
-     */
+     * @returns The distance between the source and destination.*/
     int calculateDistance(string source, string destination)
     {
         for (int i = 0; i < 110; i++)
@@ -679,8 +667,7 @@ public:
      * Calculates the total cost of a trip based on distance and car capacity.
      * @param distance The total distance of the trip.
      * @param carCapacity The capacity of the car (number of passengers).
-     * @return The total cost of the trip, including fuel, maintenance, tolls, and additional costs.
-     */
+     * @return The total cost of the trip, including fuel, maintenance, tolls, and additional costs.*/
     double calculateTotalCost(int distance, int carCapacity)
     {
         double fuelCost = distance * FUEL_COST_PER_KM;
@@ -695,8 +682,7 @@ public:
     /**
      * Calculates the points earned based on the distance traveled.
      * @param distance The distance traveled in meters.
-     * @returns The points earned based on the distance traveled.
-     */
+     * @returns The points earned based on the distance traveled.*/
     int calculatePoints(int distance)
     {
         return (distance / 100) * 5; // 10 points per 100 km
@@ -707,8 +693,7 @@ public:
      * Determines the incentive based on the points earned and saves the details to a file.
      * @param points The points earned by the user.
      * @param z The username of the user.
-     * @returns The incentive message based on the points earned.
-     */
+     * @returns The incentive message based on the points earned.*/
     string determineIncentive(int points, string z)
     {
         string incentive;
@@ -748,8 +733,7 @@ public:
      * @param source The source location of the trip.
      * @param destination The destination location of the trip.
      * @param distance The distance of the trip.
-     * @param carCapacity The capacity of the car for the trip.
-     */
+     * @param carCapacity The capacity of the car for the trip.*/
     void printBill(string source, string destination, int distance, int carCapacity)
     {
         system("cls");
@@ -797,8 +781,7 @@ public:
     // Display the menu options
     /**
      * Displays the menu options for the user to interact with the ride-sharing system.
-     * @param user A pointer to the User object for whom the menu is being displayed.
-     */
+     * @param user A pointer to the User object for whom the menu is being displayed.*/
     void displayMenu(User *user)
     {
         // this is just a outline you will have to modify it for proper working
@@ -893,8 +876,7 @@ private:
      * with the provided details such as date, time, source city, destination city, car model, maximum passengers,
      * current passengers, fare, and distance. The ride information is then stored in a file for both the user
      * and the admin to keep track of upcoming rides.
-     * @param user A pointer to the User object for whom the ride is being booked.
-     */
+     * @param user A pointer to the User object for whom the ride is being booked.*/
     void bookRide(User *user)
     {
         system("color E1");
@@ -934,8 +916,7 @@ private:
         adfile << s << endl;
     }
     /**
-     * Offers a ride by taking input from the user and creating a new Ride object.
-     */
+     * Offers a ride by taking input from the user and creating a new Ride object.*/
     void offerRide()
     {
         system("color 4F");
@@ -972,8 +953,7 @@ private:
      * Displays the upcoming rides for a given user.
      * This function clears the console screen, sets the text color, and reads and displays the upcoming rides
      * from the user's file.
-     * @param user A pointer to the User object for whom the upcoming rides are to be displayed.
-     */
+     * @param user A pointer to the User object for whom the upcoming rides are to be displayed.*/
     void viewUpcomingRides(User *user)
     {
         system("color 1F");
@@ -1002,8 +982,7 @@ private:
     }
     /**
      * Displays the past rides of a user by reading from a file.
-     * @param user A pointer to the User object whose past rides are to be viewed.
-     */
+     * @param user A pointer to the User object whose past rides are to be viewed.*/
     void viewPastRides(User *user)
     {
         system("color 5A");
@@ -1031,8 +1010,7 @@ private:
     }
     /**
      * Manages the user profile by updating user details in a file.
-     * @param user Pointer to the User object whose profile is being managed.
-     */
+     * @param user Pointer to the User object whose profile is being managed.*/
     void manageProfile(User *user)
     {
         system("color 3F");
@@ -1095,8 +1073,7 @@ private:
     }
     /**
      * Prints the bill details for a specific ride of a user.
-     * @param user A pointer to the User object for whom the bill is to be printed.
-     */
+     * @param user A pointer to the User object for whom the bill is to be printed.*/
     void printBills(User *user)
     {
         system("cls");
@@ -1173,8 +1150,7 @@ private:
     }
     /**
      * Searches for available rides based on user input for source city and destination city.
-     * If rides are found, displays the details of the available rides.
-     */
+     * If rides are found, displays the details of the available rides.*/
     void searchRides()
     {
         system("cls");
@@ -1230,8 +1206,7 @@ private:
     /**
      * Allows a user to join a carpool pool by entering the number of people.
      * If the input is invalid or no available rides match the given source and destination,
-     * or all available seats are already booked, appropriate messages are displayed.
-     */
+     * or all available seats are already booked, appropriate messages are displayed.*/
     void joinPool()
     {
         cout << "Joining a pool..." << endl;
@@ -1311,8 +1286,7 @@ private:
      * Cancels a booking based on user's choice of cancellation method.
      * The function prompts the user to choose between canceling by date or time.
      * After the user makes a choice, the booking is canceled accordingly.
-     * The function then outputs a success message and closes the output file.
-     */
+     * The function then outputs a success message and closes the output file.*/
     void cancelBooking()
     {
         int choice;
@@ -1397,8 +1371,7 @@ private:
 
     /**
      * Displays a rating prompt for the user to rate a service or product.
-     * The user can choose a rating from 1 to 5 stars.
-     */
+     * The user can choose a rating from 1 to 5 stars.*/
     void rateAndReview()
     {
         cout << "\nRATE US NOW!!" << endl;
@@ -1419,8 +1392,7 @@ private:
      * This function prompts the user to provide feedback, reads the input,
      * and appends it to a file named 'feedback.txt' in the 'CodeRelatedFiles' directory.
      * If the file is successfully opened, the feedback is saved, and a confirmation message is displayed.
-     * If there is an error opening the file, an error message is shown.
-     */
+     * If there is an error opening the file, an error message is shown.*/
     void feedback()
     {
         cout << "Providing feedback..." << endl;
@@ -1447,8 +1419,7 @@ private:
      * Allows the user to invite friends to an upcoming ride by providing the ride ID.
      * Reads the upcoming rides information from a file and checks if the provided ride ID exists.
      * If the ride ID is found, the user can proceed with inviting friends.
-     * If the ride ID is not found, a message is displayed indicating that no ride was found with the given ID.
-     */
+     * If the ride ID is not found, a message is displayed indicating that no ride was found with the given ID.*/
     void inviteFriends()
     {
 
@@ -1529,10 +1500,7 @@ private:
         file.close();
     }
 
-    /**
-     * Displays the rewards earned by a user based on past rides.
-     
-     */
+    /*Displays the rewards earned by a user based on past rides.*/
     void viewRewards()
     {
         BillCalculator bill;
@@ -1578,8 +1546,7 @@ private:
     /**
      * Calculates the CO2 emission based on the distance between two cities.
      * Prompts the user to enter the source and destination cities, calculates the distance,
-     * and provides environmental tips for a brighter future.
-     */
+     * and provides environmental tips for a brighter future.*/
     void calculateCO2Emission()
     {
         cout << "Calculating CO2 emission..." << endl;
@@ -1615,8 +1582,7 @@ private:
         Sleep(1000);
     }
     /**
-     * Exits the program and displays a thank you message.
-     */
+     * Exits the program and displays a thank you message.*/
     void exitProgram()
     {
         cout << "Exiting program..." << endl;
@@ -1626,11 +1592,9 @@ private:
 
 /**
  * Main function to run the program.
- *
  * This function initializes the necessary variables and objects, loads a file, displays a home page,
  * creates a menu, and continuously displays the menu until the program is exited.
  * After exiting the loop, a thank you page is displayed before the program ends.
- *
  * @return 0 upon successful completion of the program.
  */
 int main()
